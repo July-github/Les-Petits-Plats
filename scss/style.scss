@@ -1,0 +1,33 @@
+@import "variable_overrides";
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+.form-control{
+    border: none;
+}
+.navbar{
+    background-color: #E7E7E7;
+    color: $black;
+    & ::placeholder{
+        opacity: 25%;
+    }
+}
+.card{
+    width: 30%;
+    height: 364px;
+    &img{
+        height: 50%;
+    }
+}
+.card-body{
+    max-height: 186px;
+}
+.description{
+    max-height: 109px;
+    overflow:hidden;
+    text-overflow: ellipsis;
+}
+.ingredients{
+    max-height: 109px;
+    overflow:hidden;
+    text-overflow: ellipsis;
+}
