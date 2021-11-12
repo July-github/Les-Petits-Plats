@@ -2,18 +2,25 @@ import {recipes} from "./recipes.js";
 console.log(recipes);
 
 
-const card = document.getElementById("structure-card");
-const cloneCard = card.cloneNode(true);
-  
 
-//let numberCard = document.querySelector(".card").classList.length
-//console.log(numberCard)
+
+
+
+
 
 
 for(let i=0; i<recipes.length; i++){
-
-        document.getElementById("cards").appendChild(cloneCard);
+    /*const card = document.getElementById("structure-card");
+    const cloneCard = card.cloneNode(true);
+    document.getElementById("cards").appendChild(cloneCard);*/
     
+    let numberCard = document.querySelector(".card").classList.length
+const card = document.getElementById("structure-card");
+    const cloneCard = card.cloneNode(true);
+while (recipes.length > numberCard){
+    document.getElementById("cards").appendChild(cloneCard);
+    numberCard++;
+}
         const recipeName = document.querySelectorAll(".recipe");
         const recipeTime = document.querySelectorAll(".time");
         const recipeDescription = document.querySelectorAll(".description");
