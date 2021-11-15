@@ -28,41 +28,31 @@
           </nav>
         </div>
         <div class="container-fluid">
+        <div class="dropdown d-flex">
+          <button class="dropbtn bg-primary">Ingrédients<i class="fas fa-angle-down m-3"></i></button>
+          <div id="myDropdown" class="dropdown-content list-ingredient">
+            <p>Ingredient1</p>
+          </div>
+        
+          <button class="dropbtn bg-success mx-3">Appareil<i class="fas fa-angle-down m-3"></i></button>
+          <div id="myDropdown" class="dropdown-content">
+            <p>Appareil1</p>
+          </div>
+        
+          <button class="dropbtn bg-danger">Ustensiles<i class="fas fa-angle-down m-3"></i></button>
+          <div id="myDropdown" class="dropdown-content">
+            <p>Ustensile1</p>
+          </div>
+        </div>
+        </div>
+        <div class="container-fluid">
           <div class="row d-flex justify-content-between m-0 w-100" id="cards">
             <div class="card p-0 my-3" id="structure-card">
               <img src="./images/img.svg" class="w-100" alt="image plat"/>
               <div class="card-body text-left">
-                <div class="row my-2">
+                <div class="row my-2 w-100">
                   <div class="recipe col-8 fs-5"></div>
-                  <div class="time col-4 fw-bold fs-6"><i class="far fa-clock m-2"></i></div>
-                </div>
-                <div class="row fs-6">
-                  <ul class="ingredients col-5">
-                  </ul>
-                  <div class="description col-7"></div>
-                </div>
-              </div>
-            </div>
-            <div class="card p-0 my-3">
-              <img src="./images/img.svg" class="w-100" alt="image plat"/>
-              <div class="card-body text-left">
-                <div class="row fs-5">
-                  <div class="recipe col-8"></div>
-                  <div class="time col-4 fw-bold"><i class="far fa-clock m-2"></i></div>
-                </div>
-                <div class="row fs-6">
-                  <ul class="ingredients col-5">
-                  </ul>
-                  <div class="description col-7"></div>
-                </div>
-              </div>
-            </div>
-            <div class="card p-0 my-3">
-              <img src="./images/img.svg" class="w-100" alt="image plat"/>
-              <div class="card-body text-left">
-                <div class="row fs-5">
-                  <div class="recipe col-8"></div>
-                  <div class="time col-4 fw-bold"><i class="far fa-clock m-2"></i></div>
+                  <i class="far fa-clock m-2"></i><div class="time col-4 fw-bold fs-6"></div>
                 </div>
                 <div class="row fs-6">
                   <ul class="ingredients col-5">

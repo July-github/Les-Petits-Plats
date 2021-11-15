@@ -14,12 +14,6 @@
 .card{
     width: 30%;
     height: 364px;
-    &img{
-        height: 50%;
-    }
-}
-.card-body{
-    max-height: 186px;
 }
 .description{
     max-height: 109px;
@@ -30,4 +24,17 @@
     max-height: 109px;
     overflow:hidden;
     text-overflow: ellipsis;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    min-width: 160px;
+    z-index: 1;
+  }
+.show {display:block;}
+button{
+    border: none;
+    color: white;
+    border-radius: 5px;
+    padding-left: 1rem;
 }
