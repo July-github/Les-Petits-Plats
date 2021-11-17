@@ -11138,6 +11138,9 @@ textarea.form-control-lg {
   width: 30%;
   height: 364px;
 }
+.card img {
+  max-height: 50%;
+}
 
 .description {
   max-height: 109px;
@@ -11154,8 +11157,32 @@ textarea.form-control-lg {
 .dropdown-content {
   display: none;
   position: absolute;
-  min-width: 160px;
   z-index: 1;
+  color: white;
+  border-radius: 5px;
+  text-align: start;
+  max-height: 250px;
+  max-width: 50%;
+  overflow-y: scroll;
+}
+.dropdown-content ul {
+  list-style-type: none;
+  padding: 0;
+  columns: 3;
+  -webkit-columns: 3;
+  -moz-columns: 3;
+}
+
+#myDropdown_I {
+  background-color: #3282F7;
+}
+
+#myDropdown_A {
+  background-color: #68D9A4;
+}
+
+#myDropdown_U {
+  background-color: #ED6454;
 }
 
 .show {

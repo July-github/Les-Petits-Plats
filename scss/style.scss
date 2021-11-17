@@ -14,6 +14,10 @@
 .card{
     width: 30%;
     height: 364px;
+
+    & img{
+        max-height: 50%;
+    }
 }
 .description{
     max-height: 109px;
@@ -28,10 +32,36 @@
 .dropdown-content {
     display: none;
     position: absolute;
-    min-width: 160px;
     z-index: 1;
+    color: white;
+    border-radius: 5px;
+    text-align: start;
+    max-height: 250px;
+    max-width: 50%;
+    overflow-y: scroll;
+
+    & ul{
+        list-style-type: none;
+        padding: 0;
+        columns: 3;
+        -webkit-columns: 3;
+        -moz-columns: 3;
+    }
   }
-.show {display:block;}
+#myDropdown_I{
+      background-color: $blue;
+  }
+#myDropdown_A{
+    background-color: $green;
+}
+#myDropdown_U{
+    background-color: $red;
+}
+
+.show{
+    display:block;
+}
+
 button{
     border: none;
     color: white;

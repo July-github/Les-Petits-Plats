@@ -1,7 +1,6 @@
 {
   "name": "lespetitsplats",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -19,5 +18,9 @@
   "homepage": "https://github.com/July-github/JulieHeckler_7_01112021#readme",
   "dependencies": {
     "bootstrap": "^5.1.3"
-  }
+  },
+  "devDependencies": {
+    "eslint": "^8.2.0"
+  },
+  "description": ""
 }
