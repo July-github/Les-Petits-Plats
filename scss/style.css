@@ -11189,6 +11189,10 @@ textarea.form-control-lg {
   display: block;
 }
 
+.hide {
+  display: none;
+}
+
 button {
   border: none;
   color: white;
