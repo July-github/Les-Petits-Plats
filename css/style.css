@@ -11172,6 +11172,9 @@ textarea.form-control-lg {
   -webkit-columns: 3;
   -moz-columns: 3;
 }
+.dropdown-content ul li {
+  cursor: grab;
+}
 
 #myDropdown_I {
   background-color: #3282F7;
@@ -11185,19 +11188,18 @@ textarea.form-control-lg {
   background-color: #ED6454;
 }
 
-.show {
-  display: block;
-}
-
-.hide {
-  display: none;
-}
-
 button {
   border: none;
   color: white;
   border-radius: 5px;
   padding-left: 1rem;
+  cursor: grab;
+}
+
+#tag {
+  display: none;
+  justify-content: flex-start;
+  border-radius: 5px;
 }
 
 /*# sourceMappingURL=style.css.map */

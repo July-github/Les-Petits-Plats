@@ -46,6 +46,10 @@
         columns: 3;
         -webkit-columns: 3;
         -moz-columns: 3;
+
+        & li{
+            cursor: grab;
+        }
     }
   }
 #myDropdown_I{
@@ -57,17 +61,15 @@
 #myDropdown_U{
     background-color: $red;
 }
-
-.show{
-    display:block;
-}
-.hide{
-    display:none;
-}
-
 button{
     border: none;
     color: white;
     border-radius: 5px;
     padding-left: 1rem;
+    cursor: grab;
+}
+#tag{
+    display: none;
+    justify-content: flex-start;
+    border-radius: 5px;
 }
