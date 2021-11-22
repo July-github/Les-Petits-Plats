@@ -10,17 +10,6 @@ function getIngredient(recipe, index) {
         recipeIngredient[index].innerHTML = recipe.ingredients[j].ingredient;
     }
 }
-function fillIngredient(recipe){
-
-    for (let j=0; j<recipe.ingredients.length; j++){
-        const ingredients = document.querySelectorAll("ul.ingredients");
-        const newIngredient = document.createElement("li");
-        const recipeIngredient = document.querySelectorAll("li");
-        ingredients[j].appendChild(newIngredient);
-        recipeIngredient[j].innerHTML = recipe.ingredients[j].ingredient;
-        console.log(recipeIngredient[j].innerHTML)
-    }
-}
 
 /*Fill the cards*/
 function fillCards(){
@@ -50,7 +39,7 @@ fillCards()
 
 /*Get lists for buttons*/
 const listUstensils = []
-const listAppareil = []
+const ListApparel = []
 const listIngredients = []
 
 function getLists(){    
@@ -67,7 +56,7 @@ function getLists(){
         }
         let appliance = recipes[i].appliance.toLowerCase()
         let capAppliance = appliance[0].toUpperCase() + appliance.slice(1);
-        listAppareil.push(capAppliance);
+        ListApparel.push(capAppliance);
     }   
 }
 
@@ -76,7 +65,7 @@ getLists()
 /*Delete duplicates*/
 const uniqueListIngredients = [...new Set(listIngredients)]
 const uniqueListUstensils = [...new Set(listUstensils)]
-const uniquelistAppareil = [...new Set(listAppareil)]
+const uniqueListApparels = [...new Set(ListApparel)]
 
 /*Fill dropdowns buttons with lists*/
 const ulLists = document.querySelectorAll(".p_dropbtn") 
@@ -93,7 +82,7 @@ function fillList(array, index){
     }
 }
 fillList(uniqueListIngredients, 0)
-fillList(uniquelistAppareil, 1)
+fillList(uniqueListApparels, 1)
 fillList(uniqueListUstensils, 2)
 
 /* Display list on click*/
@@ -130,22 +119,25 @@ const mainBar = document.getElementById("search_bar")
 
 /* Array match test */
 let arraySearchMain = []
-    // switch the string to lowercase & without any accent to compare
+// switch the string to lowercase & without any accent to compare
+function standardize(item){
+    return item.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+}
 function searchMatch(){
-    for(let i=0;i<recipes.length;i++){
-        let lowerName = recipes[i].name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        let lowerDescription = recipes[i].description.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    for(let i=0; i<recipes.length; i++){
+        let lowerName = standardize(recipes[i].name)
+        let lowerDescription = standardize(recipes[i].description)
 
-        if(lowerName.includes(mainBar.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase())){
+        if(lowerName.includes(standardize(mainBar.value))){
             arraySearchMain.push(recipes[i])
         }
-        if(lowerDescription.includes(mainBar.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))){
+        if(lowerDescription.includes(standardize(mainBar.value))){
             arraySearchMain.push(recipes[i])
         }
-        for(let j=0;j<recipes[i].ingredients.length;j++){
-            let lowerIngredient = recipes[i].ingredients[j].ingredient.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        for(let j=0; j<recipes[i].ingredients.length; j++){
+            let lowerIngredient = standardize(recipes[i].ingredients[j].ingredient)
             
-            if(lowerIngredient.includes(mainBar.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))){
+            if(lowerIngredient.includes(standardize(mainBar.value))){
                 arraySearchMain.push(recipes[i])
             }
         }
@@ -159,7 +151,7 @@ function displayCards(){
     for(let i=0;i<recipes.length;i++){
         cardName[i].closest(".card").classList.add("d-none");
         for(let j=0;j<arraySearchMain.length;j++){
-            if(cardName[i].innerHTML === arraySearchMain[j].name){
+            if(standardize(cardName[i].innerHTML) === standardize(arraySearchMain[j].name)){
                 cardName[i].closest(".card").classList.remove("d-none");
             }
         }
@@ -186,34 +178,59 @@ const validInputSearch = regexInputSearch.test(mainBar.value);
         return false;
     }else{
         searchMatch();
-        displayCards();    
+        displayCards();
+        displayUstensils();
+        displayApparels();
+        displayIngredients();
     }
 }
 
 /* Display matched ingredients */
 let matchArrayIngredients = []
 function displayIngredients(){
-    for(let i=0;i<uniqueListIngredients.length;i++){
-        for(let j=0;j<arraySearchMain.length;j++){
-            for(let m=0;m<arraySearchMain[j].ingredients.length;m++){
-                if(uniqueListIngredients[i].includes(mainBar.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))){
-                    console.log(uniqueListIngredients[i])
-                    matchArrayIngredients.push(uniqueListIngredients[i]);
-                    console.log([...new Set(matchArrayIngredients)])
-                }
-            }
-        }
-    } 
+    for(let i=0; i<uniqueListIngredients.length; i++){
+        if(standardize(uniqueListIngredients[i]).includes(standardize(mainBar.value))){
+            console.log("yes")
+            matchArrayIngredients.push(uniqueListIngredients[i]);
+            console.log([...new Set(matchArrayIngredients)])
+        }else{console.log("no")}
+    }
+    console.log([...new Set(matchArrayIngredients)])
     fillList([...new Set(matchArrayIngredients)],0);
 }
 
 /* Display matched Ustensils */
+let matchArrayUstensils = []
+function displayUstensils(){
+    for(let i=0; i<uniqueListUstensils.length; i++){
+        console.log(standardize(uniqueListUstensils[i]))
+        if(standardize(uniqueListUstensils[i]).includes(standardize(mainBar.value))){
+            console.log("yes")
+            matchArrayUstensils.push(uniqueListUstensils[i]);
+        }else{console.log("no")}
+    }
+    console.log([...new Set(matchArrayUstensils)])
+    fillList([...new Set(matchArrayUstensils)],0);
+}
+
 /* Display matched Apparels */
+let matchArrayApparels = []
+function displayApparels(){
+    for(let i=0; i<uniqueListApparels.length; i++){
+        console.log(standardize(uniqueListApparels[i]))
+        if(standardize(uniqueListApparels[i]).includes(standardize(mainBar.value))){
+            console.log("yes")
+            matchArrayApparels.push(uniqueListApparels[i]);
+        }else{console.log("no")}
+    }
+    console.log([...new Set(matchArrayApparels)])
+    fillList([...new Set(matchArrayApparels)],0);
+}
 
 /* Listen to a change in the search bar */
 mainBar.addEventListener("input", function(){
     arraySearchMain = [];
     validateInputSearch(this);
     fillList([],0);
-    displayIngredients();
+    console.log(arraySearchMain)
 });
