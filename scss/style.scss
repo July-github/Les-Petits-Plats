@@ -1,4 +1,4 @@
-@import "variable_overrides";
+@import "../scss/variable_overrides.scss";
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
 
 .form-control{
@@ -69,7 +69,6 @@ button{
     cursor: grab;
 }
 #tag{
-    display: none;
     justify-content: flex-start;
     border-radius: 5px;
 }
