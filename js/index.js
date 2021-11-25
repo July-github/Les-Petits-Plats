@@ -63,33 +63,83 @@ function createNewDescription(element){
     return element.appendChild(newDiv).classList.add("description", "col-7")
 }
 
-recipes.map(recipe => createCard(document.getElementById("cards")))
-const cards = [...document.querySelectorAll(".card")]
-cards.map(card => createImg(card))
-const images = [...document.querySelectorAll(".card > img")]
-images.map(image => setImg(image))
-cards.map(card => createCardBody(card))
-const cardBodies = [...document.querySelectorAll(".card-body")]
-cardBodies.map(cardBodie => createNewRowTop(cardBodie))
-const topRows = [...document.querySelectorAll(".rowTop")]
-topRows.map(topRow => createNewRecipeName(topRow))
-topRows.map(topRow => createClock(topRow))
-const clockIcons = [...document.querySelectorAll(".iconClock")]
-clockIcons.map(clockIcon => setClock(clockIcon))
-topRows.map(topRow => createNewTime(topRow))
-cardBodies.map(cardBodie => createNewRowBottom(cardBodie))
-const bottomRows = [...document.querySelectorAll(".rowBottom")]
-bottomRows.map(bottomRow => createNewIngredient(bottomRow))
-const ingredients = [...document.querySelectorAll(".ingredients")]
-ingredients.map(ingredient => createNewUl(ingredient))
-bottomRows.map(bottomRow => createNewDescription(bottomRow))
+function createCardsBlock(arrays){
+    arrays.map(array => createCard(document.getElementById("cards")))
+        const cards = [...document.querySelectorAll(".card")]
+        cards.map(card => createImg(card))
+            const images = [...document.querySelectorAll(".card > img")]
+            images.map(image => setImg(image))
+        cards.map(card => createCardBody(card))
+            const cardBodies = [...document.querySelectorAll(".card-body")]
+            cardBodies.map(cardBodie => createNewRowTop(cardBodie))
+                const topRows = [...document.querySelectorAll(".rowTop")]
+                topRows.map(topRow => createNewRecipeName(topRow))
+                topRows.map(topRow => createClock(topRow))
+                    const clockIcons = [...document.querySelectorAll(".iconClock")]
+                    clockIcons.map(clockIcon => setClock(clockIcon))
+                topRows.map(topRow => createNewTime(topRow))
+            cardBodies.map(cardBody => createNewRowBottom(cardBody))
+                const bottomRows = [...document.querySelectorAll(".rowBottom")]
+                    bottomRows.map(bottomRow => createNewIngredient(bottomRow))
+                    const ingredients = [...document.querySelectorAll(".ingredients")]
+                    ingredients.map(ingredient => createNewUl(ingredient))
+                bottomRows.map(bottomRow => createNewDescription(bottomRow))
+}
+createCardsBlock(recipes)
 
 /* Fill cards */
 
+function fillRecipesName(array){
+    const recipeCardsNames = [...document.querySelectorAll(".recipe")]
+    for (let i=0; i<array.length; i++){
+        const lowRecipeNames = array[i].name.toLowerCase()
+        recipeCardsNames[i].innerHTML = lowRecipeNames[0].toUpperCase() + lowRecipeNames.slice(1)
+    }
+    return [recipeCardsNames]
+}
+function fillRecipesTime(array){
+    const recipeCardsTimes = [...document.querySelectorAll(".time")] 
+    for (let i=0; i<array.length; i++){
+        recipeCardsTimes[i].innerHTML = array[i].time + " min"
+    }
+    return [recipeCardsTimes]
+}
+function fillRecipesDescription(array){
+    const recipeCardsDescription = [...document.querySelectorAll(".description")] 
+    for (let i=0; i<array.length; i++){
+        recipeCardsDescription[i].innerHTML = array[i].description
+    }
+    return [recipeCardsDescription]
+}
+function createLiIngredient(array, index){
+    const recipeCardsIngredients = [...document.querySelectorAll(".ulIngredients")] 
+    for (let j=0; j<array.ingredients.length; j++){
+        createNewLi(recipeCardsIngredients[index])
+    }
+}
+function fillIngredients(array, index){   
+    const recipeCardsIngredients = [...document.querySelectorAll(".ulIngredients")] 
+    const ulLis = recipeCardsIngredients[index].querySelectorAll(".ulIngredients > li")
+    for (let j=0; j<array.ingredients.length; j++){
+        ulLis[j].innerHTML = array.ingredients[j].ingredient
+    }
+}
+function displayRecipesIngredient(){
+    for (let i=0; i<recipes.length; i++){
+        createLiIngredient(recipes[i], i)
+        for (let j=0; j<recipes[i].ingredients.length; j++){
+            fillIngredients(recipes[i], i)
+        }
+    }
+}
 
-/*Get the ingredients*/
+fillRecipesName(recipes)
+fillRecipesTime(recipes)
+fillRecipesDescription(recipes)
+displayRecipesIngredient()
+
+
 /*function getIngredient(recipe, index) {
-    console.log(recipe, index)
     const ulIngredients = document.createElement("ul")
     for (let j=0; j<recipe.ingredients.length; j++){
         const newIngredient = document.createElement("li");
@@ -103,26 +153,10 @@ bottomRows.map(bottomRow => createNewDescription(bottomRow))
     //return ulIngredients;
 //}
 
-/*Fill the cards*/
+
 /*function fillCards(){
     for(let i=0; i<recipes.length; i++){
-        const card = document.querySelector(".card");
-        let numberCard = document.querySelectorAll(".card").length
-        const cloneCard = card.cloneNode(true);
 
-        while (recipes.length > numberCard){
-            document.getElementById("cards").appendChild(cloneCard);
-            numberCard++;
-            }
-
-        const recipeName = document.querySelectorAll(".recipe");
-        const recipeTime = document.querySelectorAll(".time");
-        const recipeDescription = document.querySelectorAll(".description");
-        const stringRecipeName = recipes[i].name.toLowerCase()
-        recipeName[i].innerHTML = stringRecipeName[0].toUpperCase() + stringRecipeName.slice(1);
-        recipeTime[i].innerHTML = recipes[i].time + " min";
-        recipeDescription[i].innerHTML = recipes[i].description;
-        
         getIngredient(recipes[i], i);
     }
 }
@@ -150,7 +184,6 @@ function getLists(){
         ListApparel.push(capAppliance);
     }   
 }
-getLists()
 
 /*Delete duplicates*/
 const uniqueListIngredients = [...new Set(listIngredients)]
