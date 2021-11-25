@@ -85,10 +85,12 @@ function createCardsBlock(arrays){
                     ingredients.map(ingredient => createNewUl(ingredient))
                 bottomRows.map(bottomRow => createNewDescription(bottomRow))
 }
-createCardsBlock(recipes)
-
+function removeCardsBlock(){
+    while(document.querySelector(".card")){
+        document.getElementById("cards").removeChild(document.querySelector(".card"));
+    }
+}
 /* Fill cards */
-
 function fillRecipesName(array){
     const recipeCardsNames = [...document.querySelectorAll(".recipe")]
     for (let i=0; i<array.length; i++){
@@ -116,6 +118,7 @@ function createLiIngredient(array, index){
     for (let j=0; j<array.ingredients.length; j++){
         createNewLi(recipeCardsIngredients[index])
     }
+    return recipeCardsIngredients
 }
 function fillIngredients(array, index){   
     const recipeCardsIngredients = [...document.querySelectorAll(".ulIngredients")] 
@@ -123,67 +126,51 @@ function fillIngredients(array, index){
     for (let j=0; j<array.ingredients.length; j++){
         ulLis[j].innerHTML = array.ingredients[j].ingredient
     }
+    return ulLis
 }
-function displayRecipesIngredient(){
-    for (let i=0; i<recipes.length; i++){
-        createLiIngredient(recipes[i], i)
-        for (let j=0; j<recipes[i].ingredients.length; j++){
-            fillIngredients(recipes[i], i)
+function displayRecipesIngredient(array){
+    for (let i=0; i<array.length; i++){
+        createLiIngredient(array[i], i)
+        for (let j=0; j<array[i].ingredients.length; j++){
+            fillIngredients(array[i], i)
         }
     }
 }
-
-fillRecipesName(recipes)
-fillRecipesTime(recipes)
-fillRecipesDescription(recipes)
-displayRecipesIngredient()
-
-
-/*function getIngredient(recipe, index) {
-    const ulIngredients = document.createElement("ul")
-    for (let j=0; j<recipe.ingredients.length; j++){
-        const newIngredient = document.createElement("li");
-        newIngredient.textContent = recipe.ingredients[j].ingredient
-        ulIngredients.appendChild(newIngredient)
-        /*.appendChild(newIngredient);
-        const recipeIngredient = document.querySelectorAll(".ingredients > li");
-        recipeIngredient[index].innerHTML = recipe.ingredients[j].ingredient;*/
-    //}
-    //document.querySelectorAll(".ingredients")[index].appendChild(ulIngredients)
-    //return ulIngredients;
-//}
-
-
-/*function fillCards(){
-    for(let i=0; i<recipes.length; i++){
-
-        getIngredient(recipes[i], i);
-    }
+function displayCards(array){
+    fillRecipesName(array)
+    fillRecipesTime(array)
+    fillRecipesDescription(array)
+    displayRecipesIngredient(array)
 }
-fillCards()*/
 
+createCardsBlock(recipes)
+displayCards(recipes)
+
+/*** Dropdowns ***/
 /*Get lists for buttons*/
 const listUstensils = []
 const ListApparel = []
 const listIngredients = []
 
-function getLists(){    
-    for(let i=0; i<recipes.length; i++){
-        for (let j=0; j<recipes[i].ingredients.length; j++){
-            let ingredient = recipes[i].ingredients[j].ingredient.toLowerCase()
+function getLists(array, arrayU, arrayA, arrayI){    
+    for(let i=0; i<array.length; i++){
+        for (let j=0; j<array[i].ingredients.length; j++){
+            let ingredient = array[i].ingredients[j].ingredient.toLowerCase()
             let capIngredient = ingredient[0].toUpperCase() + ingredient.slice(1);
-            listIngredients.push(capIngredient)
+            arrayI.push(capIngredient)
         }
-        for (let j=0; j<recipes[i].ustensils.length; j++){
-            let ustensil = recipes[i].ustensils[j].toLowerCase()
+        for (let j=0; j<array[i].ustensils.length; j++){
+            let ustensil = array[i].ustensils[j].toLowerCase()
             let capUstensil = ustensil[0].toUpperCase() + ustensil.slice(1);  
-            listUstensils.push(capUstensil)
+            arrayU.push(capUstensil)
         }
-        let appliance = recipes[i].appliance.toLowerCase()
+        let appliance = array[i].appliance.toLowerCase()
         let capAppliance = appliance[0].toUpperCase() + appliance.slice(1);
-        ListApparel.push(capAppliance);
+        arrayA.push(capAppliance);
     }   
+    return arrayI.sort(), arrayU.sort(), arrayA.sort()
 }
+getLists(recipes, listUstensils, ListApparel, listIngredients)
 
 /*Delete duplicates*/
 const uniqueListIngredients = [...new Set(listIngredients)]
@@ -208,6 +195,12 @@ fillList(uniqueListIngredients, 0)
 fillList(uniqueListApparels, 1)
 fillList(uniqueListUstensils, 2)
 
+function resetDropdowns(index){
+    while(ulLists[index].querySelector("li")){
+        ulLists[index].removeChild(ulLists[index].querySelector("li"))
+    }
+}
+
 /* Display list on click*/
 function displayList(){
     const showList = document.querySelectorAll(".dropdown-content")
@@ -218,29 +211,6 @@ function displayList(){
     }
 }
 displayList();
-
-/*** Tag on click ***/
-
-let liTagIngredients = document.querySelectorAll("#myDropdown_I > ul > li")
-
-function listenClickTag(){
-    for(let i=0; i<liTagIngredients.length; i++){
-        liTagIngredients[i].addEventListener("click", function(e){
-            console.log(e)
-            const createTag = document.createElement("div")
-            createTag.textContent = "coucou"
-            createTag.classList.add("bg-primary", "p-1", "m-1")
-            const tag = document.getElementById("tag")
-
-            tag.appendChild(createTag)
-
-            //let tagIngredient = document.querySelector("#tag > div")
-            //tagIngredient.innerHTML = liTagIngredients[i].innerHTML;
-            
-        })
-    }
-}
-listenClickTag()
 
 /*** Main search bar ***/
 const mainBar = document.getElementById("search_bar")
@@ -270,95 +240,67 @@ function searchMatch(){
             }
         }
     }
+    return (arraySearchMain)
 }
 
 /* Display matched cards */
-const cardName = document.getElementsByClassName("recipe")
-
-function displayCards(){
-    for(let i=0;i<recipes.length;i++){
-        cardName[i].closest(".card").classList.add("d-none");
-        for(let j=0;j<arraySearchMain.length;j++){
-            if(standardize(cardName[i].innerHTML) === standardize(arraySearchMain[j].name)){
-                cardName[i].closest(".card").classList.remove("d-none");
-            }
-        }
-    }
-}
-
-
 function validateInputSearch(){
 //Regex 3 characters creation
 const regexInputSearch = /[a-zA-ZÀ-ÿ]{3,}/g;
 //const stringInputSearch = mainBar.textContent.toString()
 const validInputSearch = regexInputSearch.test(mainBar.value);
-    if(mainBar.value === ""){
-        for(let i=0;i<recipes.length;i++){
-            cardName[i].closest(".card").classList.remove("d-none");
-        }
-        return false;
-    }
-    if(validInputSearch === false){
-        for(let i=0;i<recipes.length;i++){
-            cardName[i].closest(".card").classList.remove("d-none");
-        }
-        console.log("false")
-        return false;
+    if((mainBar.value === "") || (validInputSearch === false)){
+        removeCardsBlock()
+        createCardsBlock(recipes)
+        displayCards(recipes)
+        resetDropdowns(0)
+        fillList(uniqueListIngredients, 0)
+        resetDropdowns(1)
+        fillList(uniqueListApparels, 1)
+        resetDropdowns(2)
+        fillList(uniqueListUstensils, 2)
     }else{
+        arraySearchMain=[]
+        let matchArrayIngredients=[]
+        let matchArrayAppliance=[]
+        let matchArrayUstensils=[]
         searchMatch();
-        displayCards();
-        displayUstensils();
-        displayApparels();
-        displayIngredients();
+        removeCardsBlock()
+        createCardsBlock([...new Set(arraySearchMain)])
+        displayCards([...new Set(arraySearchMain)])
+        resetDropdowns(0)
+        resetDropdowns(1)
+        resetDropdowns(2)
+        getLists(arraySearchMain, matchArrayUstensils, matchArrayAppliance, matchArrayIngredients)
+        fillList([...new Set(matchArrayIngredients)], 0)
+        fillList([...new Set(matchArrayAppliance)], 1)
+        fillList([...new Set(matchArrayUstensils)], 2)
     }
-}
-
-/* Display matched ingredients */
-let matchArrayIngredients = []
-function displayIngredients(){
-    for(let i=0; i<uniqueListIngredients.length; i++){
-        if(standardize(uniqueListIngredients[i]).includes(standardize(mainBar.value))){
-            console.log("yes")
-            matchArrayIngredients.push(uniqueListIngredients[i]);
-            console.log([...new Set(matchArrayIngredients)])
-        }else{console.log("no")}
-    }
-    console.log("yes", [...new Set(matchArrayIngredients)])
-    fillList([...new Set(matchArrayIngredients)],0);
-}
-
-/* Display matched Ustensils */
-let matchArrayUstensils = []
-function displayUstensils(){
-    for(let i=0; i<uniqueListUstensils.length; i++){
-        console.log(standardize(uniqueListUstensils[i]))
-        if(standardize(uniqueListUstensils[i]).includes(standardize(mainBar.value))){
-            console.log("yes")
-            matchArrayUstensils.push(uniqueListUstensils[i]);
-        }else{console.log("no")}
-    }
-    console.log([...new Set(matchArrayUstensils)])
-    fillList([...new Set(matchArrayUstensils)],0);
-}
-
-/* Display matched Apparels */
-let matchArrayApparels = []
-function displayApparels(){
-    for(let i=0; i<uniqueListApparels.length; i++){
-        console.log(standardize(uniqueListApparels[i]))
-        if(standardize(uniqueListApparels[i]).includes(standardize(mainBar.value))){
-            console.log("yes")
-            matchArrayApparels.push(uniqueListApparels[i]);
-        }else{console.log("no")}
-    }
-    console.log([...new Set(matchArrayApparels)])
-    fillList([...new Set(matchArrayApparels)],0);
 }
 
 /* Listen to a change in the search bar */
 mainBar.addEventListener("input", function(){
-    arraySearchMain = [];
     validateInputSearch(this);
-    fillList([],0);
-    console.log(arraySearchMain)
 });
+
+/*** Tag on click ***/
+const liTagIngredients = document.querySelectorAll("#myDropdown_I > ul > li")
+
+function listenClickTag(){
+    for(let i=0; i<liTagIngredients.length; i++){
+        liTagIngredients[i].addEventListener("click", function(e){
+            console.log(e)
+            const createTag = document.createElement("div")
+            createTag.textContent = "coucou"
+            createTag.classList.add("bg-primary", "p-1", "m-1")
+            const tag = document.getElementById("tag")
+
+            tag.appendChild(createTag)
+
+            //let tagIngredient = document.querySelector("#tag > div")
+            //tagIngredient.innerHTML = liTagIngredients[i].innerHTML;
+            
+        })
+    }
+}
+listenClickTag()
