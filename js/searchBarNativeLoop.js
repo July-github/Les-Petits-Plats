@@ -1,93 +1,323 @@
-/* main search bar */
+import {recipes} from "./recipes.js";
+console.log(recipes);
+
+/*** Cards ***/
+/* Create cards */
+function createCard(element){
+    const newDiv = document.createElement("div")
+    return element.appendChild(newDiv).classList.add("card", "p-0", "my-3")
+}
+function createImg(element){
+    const newImg = document.createElement("img")
+    return element.appendChild(newImg).classList.add("w-100")
+}
+function setImg(element){
+    const newSrcImg = element.setAttribute("src", "./images/img.svg")
+    const newAltImg = element.setAttribute("alt", "image plat")
+    return newAltImg, newSrcImg
+}
+function createCardBody(element){
+    const newDiv = document.createElement("div")
+    return element.appendChild(newDiv).classList.add("card-body", "text-left")
+}
+function createNewRowTop(element){
+    const newDiv = document.createElement("div")
+    return element.appendChild(newDiv).classList.add("row", "rowTop", "my-2", "w-100", "flex-nowrap")
+}
+function createNewRecipeName(element){
+    const newDiv = document.createElement("div")
+    return element.appendChild(newDiv).classList.add("recipe", "col-8", "fs-5")
+}
+function createClock(element){
+    const newIClock = document.createElement("i")
+    const newClock = element.appendChild(newIClock)
+    const newClassClock = newClock.classList.add("far", "fa-clock", "iconClock", "col-1", "m-2")
+    return newClassClock
+}
+function setClock(element){
+    const newAriaClock = element.setAttribute("aria-hidden", "true")
+    return newAriaClock
+}
+function createNewTime(element){
+    const newDiv = document.createElement("div")
+    return element.appendChild(newDiv).classList.add("time", "col-3", "fw-bold", "fs-6")
+}
+function createNewRowBottom(element){
+    const newDiv = document.createElement("div")
+    return element.appendChild(newDiv).classList.add("row", "rowBottom", "fs-6")
+}
+function createNewIngredient(element){
+    const newDiv = document.createElement("div")
+    return element.appendChild(newDiv).classList.add("ingredients", "col-5")
+}
+function createNewUl(element){
+    const newUl = document.createElement("ul")
+    return element.appendChild(newUl).classList.add("ulIngredients")
+}
+function createNewLi(element){
+    const newLi = document.createElement("li")
+    return element.appendChild(newLi)
+}
+function createNewDescription(element){
+    const newDiv = document.createElement("div")
+    return element.appendChild(newDiv).classList.add("description", "col-7")
+}
+
+function createCardsBlock(arrays){
+    arrays.map(array => createCard(document.getElementById("cards")))
+        const cards = [...document.querySelectorAll(".card")]
+        cards.map(card => createImg(card))
+            const images = [...document.querySelectorAll(".card > img")]
+            images.map(image => setImg(image))
+        cards.map(card => createCardBody(card))
+            const cardBodies = [...document.querySelectorAll(".card-body")]
+            cardBodies.map(cardBodie => createNewRowTop(cardBodie))
+                const topRows = [...document.querySelectorAll(".rowTop")]
+                topRows.map(topRow => createNewRecipeName(topRow))
+                topRows.map(topRow => createClock(topRow))
+                    const clockIcons = [...document.querySelectorAll(".iconClock")]
+                    clockIcons.map(clockIcon => setClock(clockIcon))
+                topRows.map(topRow => createNewTime(topRow))
+            cardBodies.map(cardBody => createNewRowBottom(cardBody))
+                const bottomRows = [...document.querySelectorAll(".rowBottom")]
+                    bottomRows.map(bottomRow => createNewIngredient(bottomRow))
+                    const ingredients = [...document.querySelectorAll(".ingredients")]
+                    ingredients.map(ingredient => createNewUl(ingredient))
+                bottomRows.map(bottomRow => createNewDescription(bottomRow))
+}
+function removeCardsBlock(){
+    while(document.querySelector(".card")){
+        document.getElementById("cards").removeChild(document.querySelector(".card"));
+    }
+}
+/* Fill cards */
+function fillRecipesName(array){
+    const recipeCardsNames = [...document.querySelectorAll(".recipe")]
+    for (let i=0; i<array.length; i++){
+        const lowRecipeNames = array[i].name.toLowerCase()
+        recipeCardsNames[i].innerHTML = lowRecipeNames[0].toUpperCase() + lowRecipeNames.slice(1)
+    }
+    return [recipeCardsNames]
+}
+function fillRecipesTime(array){
+    const recipeCardsTimes = [...document.querySelectorAll(".time")] 
+    for (let i=0; i<array.length; i++){
+        recipeCardsTimes[i].innerHTML = array[i].time + " min"
+    }
+    return [recipeCardsTimes]
+}
+function fillRecipesDescription(array){
+    const recipeCardsDescription = [...document.querySelectorAll(".description")] 
+    for (let i=0; i<array.length; i++){
+        recipeCardsDescription[i].innerHTML = array[i].description
+    }
+    return [recipeCardsDescription]
+}
+function createLiIngredient(array, index){
+    const recipeCardsIngredients = [...document.querySelectorAll(".ulIngredients")] 
+    for (let j=0; j<array.ingredients.length; j++){
+        createNewLi(recipeCardsIngredients[index])
+    }
+    return recipeCardsIngredients
+}
+function fillIngredients(array, index){   
+    const recipeCardsIngredients = [...document.querySelectorAll(".ulIngredients")] 
+    const ulLis = recipeCardsIngredients[index].querySelectorAll(".ulIngredients > li")
+    for (let j=0; j<array.ingredients.length; j++){
+        ulLis[j].innerHTML = array.ingredients[j].ingredient
+    }
+    return ulLis
+}
+function displayRecipesIngredient(array){
+    for (let i=0; i<array.length; i++){
+        createLiIngredient(array[i], i)
+        for (let j=0; j<array[i].ingredients.length; j++){
+            fillIngredients(array[i], i)
+        }
+    }
+}
+function displayCards(array){
+    fillRecipesName(array)
+    fillRecipesTime(array)
+    fillRecipesDescription(array)
+    displayRecipesIngredient(array)
+}
+
+createCardsBlock(recipes)
+displayCards(recipes)
+
+/*** Dropdowns ***/
+/*Get lists for buttons*/
+const listUstensils = []
+const ListApparel = []
+const listIngredients = []
+
+function getLists(array, arrayU, arrayA, arrayI){    
+    for(let i=0; i<array.length; i++){
+        for (let j=0; j<array[i].ingredients.length; j++){
+            let ingredient = array[i].ingredients[j].ingredient.toLowerCase()
+            let capIngredient = ingredient[0].toUpperCase() + ingredient.slice(1);
+            arrayI.push(capIngredient)
+        }
+        for (let j=0; j<array[i].ustensils.length; j++){
+            let ustensil = array[i].ustensils[j].toLowerCase()
+            let capUstensil = ustensil[0].toUpperCase() + ustensil.slice(1);  
+            arrayU.push(capUstensil)
+        }
+        let appliance = array[i].appliance.toLowerCase()
+        let capAppliance = appliance[0].toUpperCase() + appliance.slice(1);
+        arrayA.push(capAppliance);
+    }   
+    return arrayI.sort(), arrayU.sort(), arrayA.sort()
+}
+getLists(recipes, listUstensils, ListApparel, listIngredients)
+
+/*Delete duplicates*/
+const uniqueListIngredients = [...new Set(listIngredients)]
+const uniqueListUstensils = [...new Set(listUstensils)]
+const uniqueListApparels = [...new Set(ListApparel)]
+
+/*Fill dropdowns buttons with lists*/
+const ulLists = document.querySelectorAll(".p_dropbtn") 
+function createLi(index){
+    let listDropdown = document.createElement("li");
+    ulLists[index].appendChild(listDropdown);
+}
+function fillList(array, index){
+    for(let i=0; i<array.length; i++){
+        createLi(index)
+        let list = ulLists[index].querySelectorAll("li");
+        const liText = document.createTextNode(array[i]);
+        list[i].appendChild(liText);
+    }
+}
+fillList(uniqueListIngredients, 0)
+fillList(uniqueListApparels, 1)
+fillList(uniqueListUstensils, 2)
+
+function resetDropdowns(index){
+    while(ulLists[index].querySelector("li")){
+        ulLists[index].removeChild(ulLists[index].querySelector("li"))
+    }
+}
+
+/* Display list on click*/
+function displayList(){
+    const showList = document.querySelectorAll(".dropdown-content")
+    for(let i=0; i<showList.length;i++){
+        document.querySelectorAll(".dropbtn")[i].addEventListener("click", function(){
+            showList[i].classList.toggle("d-block")
+        })
+    }
+}
+displayList();
+
+/*** Main search bar ***/
 const mainBar = document.getElementById("search_bar")
 
 /* Array match test */
 let arraySearchMain = []
-    // switch the string to lowercase & without any accent to compare
+// switch the string to lowercase & without any accent to compare
+function standardize(item){
+    return item.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+}
 function searchMatch(){
-    for(let i=0;i<recipes.length;i++){
-        let lowerName = recipes[i].name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        let lowerDescription = recipes[i].description.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    for(let i=0; i<recipes.length; i++){
+        let lowerName = standardize(recipes[i].name)
+        let lowerDescription = standardize(recipes[i].description)
 
-        if(lowerName.includes(mainBar.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase())){
+        if(lowerName.includes(standardize(mainBar.value))){
             arraySearchMain.push(recipes[i])
         }
-        if(lowerDescription.includes(mainBar.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))){
+        if(lowerDescription.includes(standardize(mainBar.value))){
             arraySearchMain.push(recipes[i])
         }
-        for(let j=0;j<recipes[i].ingredients.length;j++){
-            let lowerIngredient = recipes[i].ingredients[j].ingredient.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        for(let j=0; j<recipes[i].ingredients.length; j++){
+            let lowerIngredient = standardize(recipes[i].ingredients[j].ingredient)
             
-            if(lowerIngredient.includes(mainBar.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))){
+            if(lowerIngredient.includes(standardize(mainBar.value))){
                 arraySearchMain.push(recipes[i])
             }
         }
     }
+    return (arraySearchMain)
 }
 
 /* Display matched cards */
-const cardName = document.getElementsByClassName("recipe")
-
-function displayCards(){
-    for(let i=0;i<recipes.length;i++){
-        cardName[i].closest(".card").classList.add("d-none");
-        for(let j=0;j<arraySearchMain.length;j++){
-            if(cardName[i].innerHTML === arraySearchMain[j].name){
-                cardName[i].closest(".card").classList.remove("d-none");
-            }
-        }
-    }
-}
-
-
 function validateInputSearch(){
 //Regex 3 characters creation
 const regexInputSearch = /[a-zA-ZÀ-ÿ]{3,}/g;
 //const stringInputSearch = mainBar.textContent.toString()
 const validInputSearch = regexInputSearch.test(mainBar.value);
-    if(mainBar.value === ""){
-        for(let i=0;i<recipes.length;i++){
-            cardName[i].closest(".card").classList.remove("d-none");
-        }
-        return false;
-    }
-    if(validInputSearch === false){
-        for(let i=0;i<recipes.length;i++){
-            cardName[i].closest(".card").classList.remove("d-none");
-        }
-        console.log("false")
-        return false;
+    if((mainBar.value === "") || (validInputSearch === false)){
+        removeCardsBlock()
+        createCardsBlock(recipes)
+        displayCards(recipes)
+        resetDropdowns(0)
+        fillList(uniqueListIngredients, 0)
+        resetDropdowns(1)
+        fillList(uniqueListApparels, 1)
+        resetDropdowns(2)
+        fillList(uniqueListUstensils, 2)
     }else{
+        arraySearchMain=[]
+        let matchArrayIngredients=[]
+        let matchArrayAppliance=[]
+        let matchArrayUstensils=[]
         searchMatch();
-        displayCards();    
+        removeCardsBlock()
+        createCardsBlock([...new Set(arraySearchMain)])
+        displayCards([...new Set(arraySearchMain)])
+        resetDropdowns(0)
+        resetDropdowns(1)
+        resetDropdowns(2)
+        getLists(arraySearchMain, matchArrayUstensils, matchArrayAppliance, matchArrayIngredients)
+        fillList([...new Set(matchArrayIngredients)], 0)
+        fillList([...new Set(matchArrayAppliance)], 1)
+        fillList([...new Set(matchArrayUstensils)], 2)
     }
 }
-
-/* Display matched ingredients */
-let matchArrayIngredients = []
-function displayIngredients(){
-    for(let i=0;i<uniqueListIngredients.length;i++){
-        for(let j=0;j<arraySearchMain.length;j++){
-            for(let m=0;m<arraySearchMain[j].ingredients.length;m++){
-                if(uniqueListIngredients[i].includes(mainBar.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))){
-                    console.log(uniqueListIngredients[i])
-                    matchArrayIngredients.push(uniqueListIngredients[i]);
-                    console.log([...new Set(matchArrayIngredients)])
-                }
-            }
-        }
-    } 
-    fillList([...new Set(matchArrayIngredients)],0);
-}
-
-/* Display matched Ustensils */
-/* Display matched Apparels */
-
 
 /* Listen to a change in the search bar */
 mainBar.addEventListener("input", function(){
-    arraySearchMain = [];
     validateInputSearch(this);
-    fillList([],0);
-    displayIngredients();
 });
+
+/*** Tag on click ***/
+const liTagIngredients = document.querySelectorAll("#myDropdown_I > ul > li")
+const liTagUstensils = document.querySelectorAll("#myDropdown_U > ul > li")
+const liTagApparels = document.querySelectorAll("#myDropdown_A > ul > li")
+
+function listenClickTag(){
+    for(let i=0; i<liTagIngredients.length; i++){
+        liTagIngredients[i].addEventListener("click", function(e){
+            console.log(e)
+            const createTag = document.createElement("div")
+            createTag.innerHTML = e.target.innerHTML + " " + ' <i class="far fa-times-circle"></i>'
+            createTag.classList.add("bg-primary", "px-3", "py-2", "m-2", "rounded-2", "text-nowrap")
+            const tag = document.getElementById("tag")
+            tag.appendChild(createTag)            
+        })
+    }
+    for(let i=0; i<liTagUstensils.length; i++){    
+        liTagUstensils[i].addEventListener("click", function(e){
+            console.log(e)
+            const createTag = document.createElement("div")
+            createTag.innerHTML = e.target.innerHTML + " " + ' <i class="far fa-times-circle"></i>'
+            createTag.classList.add("bg-danger", "px-3", "py-2", "m-2", "rounded-2", "text-nowrap")
+            const tag = document.getElementById("tag")
+            tag.appendChild(createTag)            
+        })
+    }
+    for(let i=0; i<liTagApparels.length; i++){    
+        liTagApparels[i].addEventListener("click", function(e){
+            console.log(e)
+            const createTag = document.createElement("div")
+            createTag.innerHTML = e.target.innerHTML + " " + ' <i class="far fa-times-circle"></i>'
+            createTag.classList.add("bg-success", "px-3", "py-2", "m-2", "rounded-2", "text-nowrap")
+            const tag = document.getElementById("tag")
+            tag.appendChild(createTag)            
+        })
+    }
+}
+listenClickTag()
