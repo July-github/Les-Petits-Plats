@@ -11197,9 +11197,11 @@ button {
 }
 
 #tag {
-  display: none;
   justify-content: flex-start;
   border-radius: 5px;
+}
+#tag > div {
+  color: white;
 }
 
 /*# sourceMappingURL=style.css.map */

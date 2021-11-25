@@ -285,21 +285,38 @@ mainBar.addEventListener("input", function(){
 
 /*** Tag on click ***/
 const liTagIngredients = document.querySelectorAll("#myDropdown_I > ul > li")
+const liTagUstensils = document.querySelectorAll("#myDropdown_U > ul > li")
+const liTagApparels = document.querySelectorAll("#myDropdown_A > ul > li")
 
 function listenClickTag(){
     for(let i=0; i<liTagIngredients.length; i++){
         liTagIngredients[i].addEventListener("click", function(e){
             console.log(e)
             const createTag = document.createElement("div")
-            createTag.textContent = "coucou"
-            createTag.classList.add("bg-primary", "p-1", "m-1")
+            createTag.innerHTML = e.target.innerHTML + " " + ' <i class="far fa-times-circle"></i>'
+            createTag.classList.add("bg-primary", "px-3", "py-2", "m-2", "rounded-2", "text-nowrap")
             const tag = document.getElementById("tag")
-
-            tag.appendChild(createTag)
-
-            //let tagIngredient = document.querySelector("#tag > div")
-            //tagIngredient.innerHTML = liTagIngredients[i].innerHTML;
-            
+            tag.appendChild(createTag)            
+        })
+    }
+    for(let i=0; i<liTagUstensils.length; i++){    
+        liTagUstensils[i].addEventListener("click", function(e){
+            console.log(e)
+            const createTag = document.createElement("div")
+            createTag.innerHTML = e.target.innerHTML + " " + ' <i class="far fa-times-circle"></i>'
+            createTag.classList.add("bg-danger", "px-3", "py-2", "m-2", "rounded-2", "text-nowrap")
+            const tag = document.getElementById("tag")
+            tag.appendChild(createTag)            
+        })
+    }
+    for(let i=0; i<liTagApparels.length; i++){    
+        liTagApparels[i].addEventListener("click", function(e){
+            console.log(e)
+            const createTag = document.createElement("div")
+            createTag.innerHTML = e.target.innerHTML + " " + ' <i class="far fa-times-circle"></i>'
+            createTag.classList.add("bg-success", "px-3", "py-2", "m-2", "rounded-2", "text-nowrap")
+            const tag = document.getElementById("tag")
+            tag.appendChild(createTag)            
         })
     }
 }
