@@ -136,6 +136,7 @@ function displayRecipesIngredient(array){
         }
     }
 }
+
 function displayCards(array){
     fillRecipesName(array)
     fillRecipesTime(array)
@@ -167,7 +168,7 @@ function getLists(array, arrayU, arrayA, arrayI){
         let appliance = array[i].appliance.toLowerCase()
         let capAppliance = appliance[0].toUpperCase() + appliance.slice(1);
         arrayA.push(capAppliance);
-    }   
+    }
     return arrayI.sort(), arrayU.sort(), arrayA.sort()
 }
 getLists(recipes, listUstensils, ListApparel, listIngredients)
@@ -196,6 +197,7 @@ fillList(uniqueListApparels, 1)
 fillList(uniqueListUstensils, 2)
 
 function resetDropdowns(index){
+    const ulLists = document.querySelectorAll(".p_dropbtn")
     while(ulLists[index].querySelector("li")){
         ulLists[index].removeChild(ulLists[index].querySelector("li"))
     }
@@ -203,12 +205,11 @@ function resetDropdowns(index){
 
 /* Display list on click*/
 function displayList(){
-    const showList = document.querySelectorAll(".dropdown-content")
-    for(let i=0; i<showList.length;i++){
-        document.querySelectorAll(".dropbtn")[i].addEventListener("click", function(){
-            showList[i].classList.toggle("d-block")
+    const showLists = [...document.querySelectorAll(".dropbtn")]
+    showLists.map(showList => showList.addEventListener("click", function(){
+        showList.nextElementSibling.classList.toggle("d-block")
         })
-    }
+    )
 }
 displayList();
 
@@ -216,39 +217,44 @@ displayList();
 const mainBar = document.getElementById("search_bar")
 
 /* Array match test */
-let arraySearchMain = []
 // switch the string to lowercase & without any accent to compare
 function standardize(item){
     return item.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
 }
-function searchMatch(){
-    for(let i=0; i<recipes.length; i++){
-        let lowerName = standardize(recipes[i].name)
-        let lowerDescription = standardize(recipes[i].description)
 
-        if(lowerName.includes(standardize(mainBar.value))){
-            arraySearchMain.push(recipes[i])
-        }
-        if(lowerDescription.includes(standardize(mainBar.value))){
-            arraySearchMain.push(recipes[i])
-        }
-        for(let j=0; j<recipes[i].ingredients.length; j++){
-            let lowerIngredient = standardize(recipes[i].ingredients[j].ingredient)
-            
-            if(lowerIngredient.includes(standardize(mainBar.value))){
-                arraySearchMain.push(recipes[i])
-            }
-        }
-    }
-    return (arraySearchMain)
+/* Display matched cards & dropdowns */
+function searchMatched(arrays, input){
+    const arraySearchName = arrays.filter(array => standardize(array.name).includes(standardize(input)))
+    const arraySearchDescription = arrays.filter(array => standardize(array.description).includes(standardize(input)))
+    const arraySearchIngredients = arrays.filter(array => ((array.ingredients).map(el => standardize(el.ingredient))).includes(standardize(input)))
+    //console.log(arraySearchDescription)
+    const arraySearch = [...arraySearchName, ...arraySearchDescription, ...arraySearchIngredients]
+    //console.log([...arraySearch])
+    return [...new Set(arraySearch)]
 }
 
-/* Display matched cards */
+function displayMatched(arrays, input){
+    const arraySearchMain = searchMatched(arrays, input)
+    const arraySearchIngredients = []
+    const arraySearchAppliance = []
+    const arraySearchUstensils = []
+    removeCardsBlock()
+    createCardsBlock(arraySearchMain)
+    displayCards(arraySearchMain)
+    resetDropdowns(0)
+    resetDropdowns(1)
+    resetDropdowns(2)
+    getLists(arraySearchMain, arraySearchUstensils, arraySearchAppliance, arraySearchIngredients)
+    fillList([...new Set(arraySearchIngredients)], 0)
+    fillList([...new Set(arraySearchAppliance)], 1)
+    fillList([...new Set(arraySearchUstensils)], 2)
+    displayOnClickTag()
+}
 function validateInputSearch(){
-//Regex 3 characters creation
-const regexInputSearch = /[a-zA-ZÀ-ÿ]{3,}/g;
-//const stringInputSearch = mainBar.textContent.toString()
-const validInputSearch = regexInputSearch.test(mainBar.value);
+    //Regex 3 characters creation
+    const regexInputSearch = /[a-zA-ZÀ-ÿ]{3,}/g;
+    //const stringInputSearch = mainBar.textContent.toString()
+    const validInputSearch = regexInputSearch.test(mainBar.value);
     if((mainBar.value === "") || (validInputSearch === false)){
         removeCardsBlock()
         createCardsBlock(recipes)
@@ -260,21 +266,7 @@ const validInputSearch = regexInputSearch.test(mainBar.value);
         resetDropdowns(2)
         fillList(uniqueListUstensils, 2)
     }else{
-        arraySearchMain=[]
-        let matchArrayIngredients=[]
-        let matchArrayAppliance=[]
-        let matchArrayUstensils=[]
-        searchMatch();
-        removeCardsBlock()
-        createCardsBlock([...new Set(arraySearchMain)])
-        displayCards([...new Set(arraySearchMain)])
-        resetDropdowns(0)
-        resetDropdowns(1)
-        resetDropdowns(2)
-        getLists(arraySearchMain, matchArrayUstensils, matchArrayAppliance, matchArrayIngredients)
-        fillList([...new Set(matchArrayIngredients)], 0)
-        fillList([...new Set(matchArrayAppliance)], 1)
-        fillList([...new Set(matchArrayUstensils)], 2)
+        displayMatched(recipes, mainBar.value)
     }
 }
 
@@ -283,41 +275,69 @@ mainBar.addEventListener("input", function(){
     validateInputSearch(this);
 });
 
-/*** Tag on click ***/
-const liTagIngredients = document.querySelectorAll("#myDropdown_I > ul > li")
-const liTagUstensils = document.querySelectorAll("#myDropdown_U > ul > li")
-const liTagApparels = document.querySelectorAll("#myDropdown_A > ul > li")
+/*** Tag on click ***/  
+function mixMatched(item){
+    const toto = searchMatched(recipes, mainBar.value)
+    displayMatched(toto, item)
+}
+function displayOnClickTag(){
+    const liTagIngredients = document.querySelectorAll("#myDropdown_I > ul > li")
+    const liTagUstensils = document.querySelectorAll("#myDropdown_U > ul > li")
+    const liTagApparels = document.querySelectorAll("#myDropdown_A > ul > li")
 
-function listenClickTag(){
     for(let i=0; i<liTagIngredients.length; i++){
         liTagIngredients[i].addEventListener("click", function(e){
-            console.log(e)
             const createTag = document.createElement("div")
-            createTag.innerHTML = e.target.innerHTML + " " + ' <i class="far fa-times-circle"></i>'
-            createTag.classList.add("bg-primary", "px-3", "py-2", "m-2", "rounded-2", "text-nowrap")
-            const tag = document.getElementById("tag")
-            tag.appendChild(createTag)            
+            const tag = document.getElementById("taglist")
+            createTag.innerHTML = e.target.innerHTML + " " + ' <i class="far fa-times-circle" id="iconI"></i>'
+            createTag.classList.add("bg-primary", "px-3", "py-2", "m-2", "rounded-2", "text-nowrap") 
+            tag.appendChild(createTag)
+            if(mainBar.value===""){
+                displayMatched(recipes, e.target.innerHTML)   
+            }else{
+                mixMatched(e.target.innerHTML)
+            }
         })
     }
     for(let i=0; i<liTagUstensils.length; i++){    
         liTagUstensils[i].addEventListener("click", function(e){
-            console.log(e)
             const createTag = document.createElement("div")
-            createTag.innerHTML = e.target.innerHTML + " " + ' <i class="far fa-times-circle"></i>'
+            const tag = document.getElementById("taglist")
+            createTag.innerHTML = e.target.innerHTML + " " + ' <i class="far fa-times-circle" id="iconU"></i>'
             createTag.classList.add("bg-danger", "px-3", "py-2", "m-2", "rounded-2", "text-nowrap")
-            const tag = document.getElementById("tag")
-            tag.appendChild(createTag)            
+            tag.appendChild(createTag)    
+            if(mainBar.value===""){
+                displayMatched(recipes, e.target.innerHTML)   
+            }else{
+                mixMatched(e.target.innerHTML)
+            }      
         })
     }
     for(let i=0; i<liTagApparels.length; i++){    
         liTagApparels[i].addEventListener("click", function(e){
-            console.log(e)
             const createTag = document.createElement("div")
-            createTag.innerHTML = e.target.innerHTML + " " + ' <i class="far fa-times-circle"></i>'
+            const tag = document.getElementById("taglist")
+            createTag.innerHTML = e.target.innerHTML + " " + ' <i class="far fa-times-circle" id="iconA"></i>'
             createTag.classList.add("bg-success", "px-3", "py-2", "m-2", "rounded-2", "text-nowrap")
-            const tag = document.getElementById("tag")
-            tag.appendChild(createTag)            
+            tag.appendChild(createTag)  
+            if(mainBar.value===""){
+                displayMatched(recipes, e.target.innerHTML)   
+            }else{
+                mixMatched(e.target.innerHTML)
+            }
         })
     }
 }
-listenClickTag()
+displayOnClickTag()
+
+/* close tag on click */
+document.addEventListener("click", function(e){
+    if(e.target && e.target.id== "iconU" || e.target.id== "iconA" || e.target.id== "iconI"){
+        e.target.parentElement.classList.toggle("d-none")
+        /*if(mainBar.value===""){
+            displayCards(recipes)   
+        }else{
+            mixMatched(e.target.innerHTML)
+        }*/
+    }
+})
