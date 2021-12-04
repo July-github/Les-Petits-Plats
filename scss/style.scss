@@ -4,30 +4,60 @@
 .form-control{
     border: none;
 }
-.navbar{
+.form-control:focus {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+  }
+#navbar > .navbar{
     background-color: #E7E7E7;
+    border-radius: 5px;
     color: $black;
     & ::placeholder{
         opacity: 25%;
     }
 }
+#search_dropI, #search_dropA, #search_dropU{
+    color: white;
+    &::placeholder{
+        color: white;
+        opacity: 50%;
+    }
+}
 .card{
-    width: 30%;
     height: 364px;
+    border: none;
 
     & img{
         max-height: 50%;
+        object-fit: cover;
+        border-radius: 5px 5px 0 0;
     }
 }
+
+.rowTop{
+    line-height: 1.5;
+    vertical-align: middle;
+}
+.time{
+    font-weight: 500;
+    text-align: end;
+    vertical-align: bottom;
+}
+i{
+    text-align: end;
+}
 .description{
-    max-height: 109px;
-    overflow:hidden;
-    text-overflow: ellipsis;
+    font-size: 12px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
 }
 .ingredients{
     max-height: 109px;
-    overflow:hidden;
-    text-overflow: ellipsis;
+    font-size: 12px;
+    overflow-y: hidden;
 }
 .dropdown-content {
     display: none;
@@ -41,25 +71,28 @@
     overflow-y: scroll;
 
     & ul{
-        list-style-type: none;
         padding: 0;
         columns: 3;
         -webkit-columns: 3;
         -moz-columns: 3;
 
         & li{
+            list-style-type: none;
             cursor: grab;
         }
     }
   }
 #myDropdown_I{
-      background-color: $blue;
+      background-color: $primary;
   }
 #myDropdown_A{
-    background-color: $green;
+    background-color: $success;
 }
 #myDropdown_U{
-    background-color: $red;
+    background-color: $danger;
+}
+#myDropdown_I, #myDropdown_A, #myDropdown_U{
+  font-size: 14px;
 }
 button{
     border: none;
@@ -74,6 +107,13 @@ button{
 
     & > div{
         color: white;
-        cursor:grab
+        cursor: grab;
     }
+    & > i{
+    margin-left: 2px;
+    }
+}
+#navbar::after{
+    display: block;
+    content: attr(data-after);
 }

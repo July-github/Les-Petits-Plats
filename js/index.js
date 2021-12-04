@@ -1,11 +1,11 @@
 import {recipes} from "./recipes.js";
 console.log(recipes);
 
-/*** Cards ***/
+/***** Cards *****/
 /* Create cards */
 function createCard(element){
     const newDiv = document.createElement("div")
-    return element.appendChild(newDiv).classList.add("card", "p-0", "my-3")
+    return element.appendChild(newDiv).classList.add("card", "p-0", "my-3", "mx-1", "col-12", "col-md-5", "col-lg-3")
 }
 function createImg(element){
     const newImg = document.createElement("img")
@@ -26,12 +26,12 @@ function createNewRowTop(element){
 }
 function createNewRecipeName(element){
     const newDiv = document.createElement("div")
-    return element.appendChild(newDiv).classList.add("recipe", "col-8", "fs-5")
+    return element.appendChild(newDiv).classList.add("recipe", "col-9", "fs-6")
 }
 function createClock(element){
     const newIClock = document.createElement("i")
     const newClock = element.appendChild(newIClock)
-    const newClassClock = newClock.classList.add("far", "fa-clock", "iconClock", "col-1", "m-2")
+    const newClassClock = newClock.classList.add("far", "fa-clock", "iconClock", "col-1", "fs-4", "p-0")
     return newClassClock
 }
 function setClock(element){
@@ -40,11 +40,11 @@ function setClock(element){
 }
 function createNewTime(element){
     const newDiv = document.createElement("div")
-    return element.appendChild(newDiv).classList.add("time", "col-3", "fw-bold", "fs-6")
+    return element.appendChild(newDiv).classList.add("time", "col-2", "fs-6", "p-0")
 }
 function createNewRowBottom(element){
     const newDiv = document.createElement("div")
-    return element.appendChild(newDiv).classList.add("row", "rowBottom", "fs-6")
+    return element.appendChild(newDiv).classList.add("row", "rowBottom")
 }
 function createNewIngredient(element){
     const newDiv = document.createElement("div")
@@ -52,44 +52,63 @@ function createNewIngredient(element){
 }
 function createNewUl(element){
     const newUl = document.createElement("ul")
-    return element.appendChild(newUl).classList.add("ulIngredients")
+    return element.appendChild(newUl).classList.add("ulIngredients", "p-0")
 }
 function createNewLi(element){
     const newLi = document.createElement("li")
-    return element.appendChild(newLi)
+    return element.appendChild(newLi).classList.add("list-unstyled")
 }
 function createNewDescription(element){
     const newDiv = document.createElement("div")
     return element.appendChild(newDiv).classList.add("description", "col-7")
 }
 
-function createCardsBlock(arrays){
-    arrays.map(array => createCard(document.getElementById("cards")))
-        const cards = [...document.querySelectorAll(".card")]
-        cards.map(card => createImg(card))
-            const images = [...document.querySelectorAll(".card > img")]
-            images.map(image => setImg(image))
-        cards.map(card => createCardBody(card))
-            const cardBodies = [...document.querySelectorAll(".card-body")]
-            cardBodies.map(cardBodie => createNewRowTop(cardBodie))
-                const topRows = [...document.querySelectorAll(".rowTop")]
-                topRows.map(topRow => createNewRecipeName(topRow))
-                topRows.map(topRow => createClock(topRow))
-                    const clockIcons = [...document.querySelectorAll(".iconClock")]
-                    clockIcons.map(clockIcon => setClock(clockIcon))
-                topRows.map(topRow => createNewTime(topRow))
-            cardBodies.map(cardBody => createNewRowBottom(cardBody))
-                const bottomRows = [...document.querySelectorAll(".rowBottom")]
-                    bottomRows.map(bottomRow => createNewIngredient(bottomRow))
-                    const ingredients = [...document.querySelectorAll(".ingredients")]
-                    ingredients.map(ingredient => createNewUl(ingredient))
-                bottomRows.map(bottomRow => createNewDescription(bottomRow))
+function createCardsBlock(arrayRecipes){
+    // Card creation
+    arrayRecipes.map(arrayRecipe => createCard(document.getElementById("cards")))
+    const cards = [...document.querySelectorAll(".card")]
+
+    // Recipe image creation
+    cards.map(card => createImg(card))
+    const images = [...document.querySelectorAll(".card > img")]
+    images.map(image => setImg(image))
+    
+    // Bodycard creation
+    cards.map(card => createCardBody(card))
+    const cardBodies = [...document.querySelectorAll(".card-body")]
+    
+    // Top row creation
+    cardBodies.map(cardBodie => createNewRowTop(cardBodie))
+    const topRows = [...document.querySelectorAll(".rowTop")]
+    
+    // Recipe name creation
+    topRows.map(topRow => createNewRecipeName(topRow))
+     
+    // Recipe timing & icon creation
+    topRows.map(topRow => createClock(topRow))
+    const clockIcons = [...document.querySelectorAll(".iconClock")]
+    clockIcons.map(clockIcon => setClock(clockIcon))
+    topRows.map(topRow => createNewTime(topRow))
+    
+    // Bottom row creation
+    cardBodies.map(cardBody => createNewRowBottom(cardBody))
+    const bottomRows = [...document.querySelectorAll(".rowBottom")]
+    
+    // Ingredients list creation
+    bottomRows.map(bottomRow => createNewIngredient(bottomRow))
+    const ingredients = [...document.querySelectorAll(".ingredients")]
+    ingredients.map(ingredient => createNewUl(ingredient))
+    
+    // Recipe description creation
+    bottomRows.map(bottomRow => createNewDescription(bottomRow))
 }
+
 function removeCardsBlock(){
     while(document.querySelector(".card")){
         document.getElementById("cards").removeChild(document.querySelector(".card"));
     }
 }
+
 /* Fill cards */
 function fillRecipesName(array){
     const recipeCardsNames = [...document.querySelectorAll(".recipe")]
@@ -124,7 +143,16 @@ function fillIngredients(array, index){
     const recipeCardsIngredients = [...document.querySelectorAll(".ulIngredients")] 
     const ulLis = recipeCardsIngredients[index].querySelectorAll(".ulIngredients > li")
     for (let j=0; j<array.ingredients.length; j++){
+        if(array.ingredients[j].unit){
+            ulLis[j].innerHTML = array.ingredients[j].ingredient + ": " + array.ingredients[j].unit
+        }if(array.ingredients[j].quantity){
+            ulLis[j].innerHTML = array.ingredients[j].ingredient + ": " + array.ingredients[j].quantity
+        }if((array.ingredients[j].quantity) && (array.ingredients[j].unit)){
+            ulLis[j].innerHTML = array.ingredients[j].ingredient + ": " + array.ingredients[j].quantity + " " + array.ingredients[j].unit
+        }
+        else{
         ulLis[j].innerHTML = array.ingredients[j].ingredient
+        }
     }
     return ulLis
 }
@@ -136,7 +164,6 @@ function displayRecipesIngredient(array){
         }
     }
 }
-
 function displayCards(array){
     fillRecipesName(array)
     fillRecipesTime(array)
@@ -147,7 +174,7 @@ function displayCards(array){
 createCardsBlock(recipes)
 displayCards(recipes)
 
-/*** Dropdowns ***/
+/***** Dropdowns *****/
 /*Get lists for buttons*/
 const listUstensils = []
 const ListApparel = []
@@ -202,8 +229,36 @@ function resetDropdowns(index){
         ulLists[index].removeChild(ulLists[index].querySelector("li"))
     }
 }
+/* Search bar Dropdowns */
+function searchDropMatched(arrayDrop, e){
+    const standardizedInput = standardize(e.target.value)
+    const newListDrop = arrayDrop.filter(item => standardize(item).includes(standardizedInput))
+    return newListDrop
+}
+function getDropClick(dropClickType){
+    switch(dropClickType){
+        case "ingredients":
+            return "search_dropI";
+        case "ustensils":
+            return "search_dropU";
+        case "apparels":
+            return "search_dropA";
+    }
+}
+function getSearchDrop(arrayDrop, index, dropClickType){
+    const getArrayDrop = getDropClick(dropClickType)
+    const searchDrop = document.getElementById(getArrayDrop)
+    searchDrop.addEventListener("input", function(e) {
+        resetDropdowns(index)
+        const newArrayDrop = searchDropMatched(arrayDrop, e)
+        fillList(newArrayDrop, index)
+    })
+}
+getSearchDrop(uniqueListIngredients, 0, "ingredients")
+getSearchDrop(uniqueListApparels, 1, "apparels")
+getSearchDrop(uniqueListUstensils, 2, "ustensils")
 
-/* Display list on click*/
+/* Display & close list on click*/
 function displayList(){
     const showLists = [...document.querySelectorAll(".dropbtn")]
     showLists.map(showList => showList.addEventListener("click", function(){
@@ -211,9 +266,16 @@ function displayList(){
         })
     )
 }
+function closeList(){
+    const closeLists = [...document.querySelectorAll(".dropdown-content > nav > i")]
+    closeLists.map(closeList => closeList.addEventListener("click", function(){
+        closeList.parentElement.parentElement.classList.remove("d-block")
+    }))
+}
 displayList();
+closeList()
 
-/*** Main search bar ***/
+/***** Main search bar *****/
 const mainBar = document.getElementById("search_bar")
 
 /* Array match test */
@@ -223,39 +285,195 @@ function standardize(item){
 }
 
 /* Display matched cards & dropdowns */
-function searchMatched(arrays, input){
-    const arraySearchName = arrays.filter(array => standardize(array.name).includes(standardize(input)))
-    const arraySearchDescription = arrays.filter(array => standardize(array.description).includes(standardize(input)))
-    const arraySearchIngredients = arrays.filter(array => ((array.ingredients).map(el => standardize(el.ingredient))).includes(standardize(input)))
-    //console.log(arraySearchDescription)
+function searchMatched(arrayRecipes, input){
+    const standardizedInput = standardize(input)
+    const arraySearchName = arrayRecipes.filter(arrayRecipe => standardize(arrayRecipe.name).includes(standardizedInput))
+    const arraySearchDescription = arrayRecipes.filter(arrayRecipe => standardize(arrayRecipe.description).includes(standardizedInput))
+    const arraySearchIngredients = arrayRecipes.filter(arrayRecipe => {
+        let validRecipe = false
+        arrayRecipe.ingredients.forEach(item => {
+                if(standardize(item.ingredient).includes(standardizedInput)){ 
+                    return validRecipe = true
+                }
+            })
+       return validRecipe
+    })
     const arraySearch = [...arraySearchName, ...arraySearchDescription, ...arraySearchIngredients]
-    //console.log([...arraySearch])
     return [...new Set(arraySearch)]
 }
-
-function displayMatched(arrays, input){
-    const arraySearchMain = searchMatched(arrays, input)
-    const arraySearchIngredients = []
-    const arraySearchAppliance = []
-    const arraySearchUstensils = []
+function tagIMatched(arrayRecipes, input){
+    const standardizedInput = standardize(input)
+    const arraySearchIngredients = arrayRecipes.filter(arrayRecipe => {
+        let validRecipe = false
+        arrayRecipe.ingredients.forEach(item => {
+                if(standardize(item.ingredient).includes(standardizedInput)){ 
+                    return validRecipe = true
+                }
+            })
+        return validRecipe
+        })
+    return [...arraySearchIngredients]
+}
+function tagAMatched(arrayRecipes, input){
+    const standardizedInput = standardize(input)
+    const arrayTagApparels = arrayRecipes.filter(arrayRecipe => standardize(arrayRecipe.appliance).includes(standardizedInput))
+    return [...arrayTagApparels]
+}
+function tagUMatched(arrayRecipes, input){
+    const standardizedInput = standardize(input)
+    const arrayTagUstensils = arrayRecipes.filter(arrayRecipe => {
+        let validRecipe = false
+        arrayRecipe.ustensils.forEach(el => {
+            if(standardize(el).includes(standardizedInput)){
+                return validRecipe = true
+            }     
+        })
+        return validRecipe
+    })
+    return [...arrayTagUstensils]
+}
+function mixArray(arrayRecipes, input){
+    const x = searchMatched(arrayRecipes, input)
+    const y = tagMatched(arrayRecipes, input)
+    return [...new Set([...x, ...y])]
+}
+function displayError(arraySearchMain){
+    const errorDiv = document.querySelector("#navbar")
+    if(arraySearchMain.length === 0){
+        errorDiv.setAttribute("data-after", "Aucune recette ne correspond à votre critère… vous pouvez chercher « tarte aux pommes », « poisson », etc.")
+    }else{
+        errorDiv.setAttribute("data-after", "");
+    }
+}
+function displayMatched(arraySearchMain){
+    displayError(arraySearchMain)
     removeCardsBlock()
     createCardsBlock(arraySearchMain)
     displayCards(arraySearchMain)
     resetDropdowns(0)
     resetDropdowns(1)
     resetDropdowns(2)
+    const arraySearchIngredients = []
+    const arraySearchAppliance = []
+    const arraySearchUstensils = []
     getLists(arraySearchMain, arraySearchUstensils, arraySearchAppliance, arraySearchIngredients)
     fillList([...new Set(arraySearchIngredients)], 0)
     fillList([...new Set(arraySearchAppliance)], 1)
     fillList([...new Set(arraySearchUstensils)], 2)
     displayOnClickTag()
 }
-function validateInputSearch(){
+function reduceArray(textParentTag, tagMatched, e){
+    for (let i=0; i<textParentTag.length; i++){
+        const z = tagMatched(recipes, textParentTag[i])
+        console.log(z)
+        tagMatched(z, e.target.innerText)
+        return [...tagMatched(z, e.target.innerText)]
+    }
+}
+function testAlreadyTag(e){
+    const testTagI = document.getElementsByClassName("iconI").length
+    const testTagA = document.getElementsByClassName("iconA").length
+    const testTagU = document.getElementsByClassName("iconU").length
+    const TagI = document.querySelectorAll(".iconI")
+    const TagA = document.querySelectorAll(".iconA")
+    const TagU = document.querySelectorAll(".iconU")
+
+    if((testTagI !== 0) && (testTagA === 0) && (testTagU === 0)){
+        if(testTagI === 1){
+            const arraySearchMain = tagIMatched(recipes, e.target.innerText)
+            displayMatched(arraySearchMain)
+        }else{
+            const parentTagI = [...TagI].map(TagI => TagI.parentElement, [])
+            const textParentTagI = parentTagI.map(parentTagI => parentTagI.innerText)
+            const arraySearchMain = reduceArray(textParentTagI, tagIMatched, e)
+            displayMatched(arraySearchMain)
+        } 
+    }if((testTagA !== 0) && (testTagI === 0) && (testTagU === 0)){
+        if(testTagA === 1){
+            const arraySearchMain = tagAMatched(recipes, e.target.innerText)
+            displayMatched(arraySearchMain)
+        }else{
+            const parentTagA = [...TagA].map(TagA => TagA.parentElement, [])
+            const textParentTagA = parentTagA.map(parentTagA => parentTagA.innerText)
+            const arraySearchMain = reduceArray(textParentTagA, tagAMatched, e)
+            displayMatched(arraySearchMain)
+        } 
+    }if((testTagU !== 0) && (testTagA === 0) && (testTagI === 0)){
+        if(testTagU === 1){
+            const arraySearchMain = tagUMatched(recipes, e.target.innerText)
+            displayMatched(arraySearchMain)
+        }else{
+            const parentTagU = [...TagU].map(TagU => TagU.parentElement, [])
+            console.log(parentTagU)
+            const textParentTagU = parentTagU.map(parentTagU => parentTagU.innerText)
+            console.log(textParentTagU)
+            const arraySearchMain = reduceArray(textParentTagU, tagUMatched, e)
+            console.log(arraySearchMain)
+            displayMatched(arraySearchMain)
+        }
+    }if((testTagI !== 0) && (testTagA !== 0) && (testTagU === 0)){
+        const TagIA = [...tagIMatched(recipes, TagI.innerText)]
+        const arraySearchMain = TagIA.reduce(TagIA => tagAMatched(recipes, TagA.innerText))
+        displayMatched(arraySearchMain)
+    }if((testTagI !== 0) && (testTagA === 0) && (testTagU !== 0)){
+        const TagIU = [...tagIMatched(recipes, TagI.innerText)]
+        const arraySearchMain = TagIU.reduce(TagIU => tagUMatched(recipes, TagU.innerText))
+        displayMatched(arraySearchMain)
+    }if((testTagI === 0) && (testTagA !== 0) && (testTagU !== 0)){
+        const TagAU = [...tagAMatched(recipes, TagA.innerText)]
+        const arraySearchMain = TagAU.reduce(TagAU => tagUMatched(recipes, TagU.innerText))
+        displayMatched(arraySearchMain)
+    }
+}
+
+function testExistTag(e){
+    const testTagI = document.getElementsByClassName("iconI").length
+    const testTagA = document.getElementsByClassName("iconA").length
+    const testTagU = document.getElementsByClassName("iconU").length
+    const TagI = document.querySelectorAll(".iconI").parentElement
+    const TagA = document.querySelectorAll(".iconA").parentElement
+    const TagU = document.querySelectorAll(".iconU").parentElement
+    
+    if((testTagI === 0) && (testTagA === 0) && (testTagU === 0)){
+        displayMatched(recipes, mainBar.value)
+    }if((testTagI !== 0) && (testTagA === 0) && (testTagU === 0)){
+        if(TagI === undefined){
+            mixMatched(e)
+        }else{
+        recipes.reduce(recipe => displayMatched(recipe, TagI.innerText))
+        } 
+    }if((testTagA !== 0) && (testTagI === 0) && (testTagU === 0)){
+        if(TagA === undefined){
+            mixMatched(e)
+        }else{
+        recipes.reduce(recipe => displayMatched(recipe, TagA.innerText))
+        } 
+    }if((testTagU !== 0) && (testTagA === 0) && (testTagI === 0)){
+        if(TagU === undefined){
+            mixMatched(e)
+        }else{
+        recipes.reduce(recipe => displayMatched(recipe, TagU.innerText))
+        }
+    }if((testTagI !== 0) && (testTagA !== 0) && (testTagU === 0)){
+        const TagIA = [...recipes.reduce(recipe => displayMatched(recipe, TagI.innerText))]
+        TagIA.reduce(recipes.reduce(recipe => displayMatched(recipe, TagA.innerText)))
+    }if((testTagI !== 0) && (testTagA === 0) && (testTagU !== 0)){
+        const TagIU = [...recipes.reduce(recipe => displayMatched(recipe, TagI.innerText))]
+        TagIU.reduce(recipes.reduce(recipe => displayMatched(recipe, TagU.innerText)))
+    }if((testTagI === 0) && (testTagA !== 0) && (testTagU !== 0)){
+        const TagAU = [...recipes.reduce(recipe => displayMatched(recipe, TagA.innerText))]
+        TagAU.reduce(recipes.reduce(recipe => displayMatched(recipe, TagU.innerText)))
+    }else{
+        displayMatched(recipes, mainBar.value)
+    }
+}
+function validateInputSearch(e){
     //Regex 3 characters creation
     const regexInputSearch = /[a-zA-ZÀ-ÿ]{3,}/g;
     //const stringInputSearch = mainBar.textContent.toString()
     const validInputSearch = regexInputSearch.test(mainBar.value);
-    if((mainBar.value === "") || (validInputSearch === false)){
+
+    if(validInputSearch === false){
         removeCardsBlock()
         createCardsBlock(recipes)
         displayCards(recipes)
@@ -265,8 +483,9 @@ function validateInputSearch(){
         fillList(uniqueListApparels, 1)
         resetDropdowns(2)
         fillList(uniqueListUstensils, 2)
+        displayError(recipes)
     }else{
-        displayMatched(recipes, mainBar.value)
+        testExistTag(e)
     }
 }
 
@@ -275,10 +494,36 @@ mainBar.addEventListener("input", function(){
     validateInputSearch(this);
 });
 
-/*** Tag on click ***/  
-function mixMatched(item){
+/***** Tag on click *****/  
+function getTagColor(tagType){
+    switch(tagType){
+        case "ingredients":
+            return "bg-primary";
+        case "ustensils":
+            return "bg-danger";
+        case "apparels":
+            return "bg-success";
+    }
+}
+function createTag(e, tagType){
+    const createTag = document.createElement("div")
+    const tag = document.getElementById("taglist")
+    const tagColor = getTagColor(tagType)
+    createTag.classList.add(tagColor, "px-3", "py-2", "m-2", "rounded-2", "text-nowrap") 
+    tag.appendChild(createTag)
+    if(tagType === "ingredients"){
+        createTag.innerHTML = e.target.innerHTML + '<i class="far fa-times-circle iconI"></i>'
+    }
+    if(tagType === "ustensils"){
+        createTag.innerHTML = e.target.innerHTML + '<i class="far fa-times-circle iconU"></i>'
+    }
+    if(tagType === "apparels"){
+        createTag.innerHTML = e.target.innerHTML + '<i class="far fa-times-circle iconA"></i>'
+    }
+}
+function mixMatched(e){
     const toto = searchMatched(recipes, mainBar.value)
-    displayMatched(toto, item)
+    displayMatched(toto, e.target.innerText)
 }
 function displayOnClickTag(){
     const liTagIngredients = document.querySelectorAll("#myDropdown_I > ul > li")
@@ -287,43 +532,31 @@ function displayOnClickTag(){
 
     for(let i=0; i<liTagIngredients.length; i++){
         liTagIngredients[i].addEventListener("click", function(e){
-            const createTag = document.createElement("div")
-            const tag = document.getElementById("taglist")
-            createTag.innerHTML = e.target.innerHTML + " " + ' <i class="far fa-times-circle" id="iconI"></i>'
-            createTag.classList.add("bg-primary", "px-3", "py-2", "m-2", "rounded-2", "text-nowrap") 
-            tag.appendChild(createTag)
+            createTag(e, "ingredients")
             if(mainBar.value===""){
-                displayMatched(recipes, e.target.innerHTML)   
+                testAlreadyTag(e)
             }else{
-                mixMatched(e.target.innerHTML)
+                testExistTag(e)
             }
         })
     }
     for(let i=0; i<liTagUstensils.length; i++){    
         liTagUstensils[i].addEventListener("click", function(e){
-            const createTag = document.createElement("div")
-            const tag = document.getElementById("taglist")
-            createTag.innerHTML = e.target.innerHTML + " " + ' <i class="far fa-times-circle" id="iconU"></i>'
-            createTag.classList.add("bg-danger", "px-3", "py-2", "m-2", "rounded-2", "text-nowrap")
-            tag.appendChild(createTag)    
+            createTag(e, "ustensils")  
             if(mainBar.value===""){
-                displayMatched(recipes, e.target.innerHTML)   
+                testAlreadyTag(e)
             }else{
-                mixMatched(e.target.innerHTML)
+                testExistTag(e)
             }      
         })
     }
-    for(let i=0; i<liTagApparels.length; i++){    
+    for(let i=0; i<liTagApparels.length; i++){
         liTagApparels[i].addEventListener("click", function(e){
-            const createTag = document.createElement("div")
-            const tag = document.getElementById("taglist")
-            createTag.innerHTML = e.target.innerHTML + " " + ' <i class="far fa-times-circle" id="iconA"></i>'
-            createTag.classList.add("bg-success", "px-3", "py-2", "m-2", "rounded-2", "text-nowrap")
-            tag.appendChild(createTag)  
+            createTag(e, "apparels") 
             if(mainBar.value===""){
-                displayMatched(recipes, e.target.innerHTML)   
+                testAlreadyTag(e) 
             }else{
-                mixMatched(e.target.innerHTML)
+                testExistTag(e)
             }
         })
     }
@@ -332,12 +565,13 @@ displayOnClickTag()
 
 /* close tag on click */
 document.addEventListener("click", function(e){
-    if(e.target && e.target.id== "iconU" || e.target.id== "iconA" || e.target.id== "iconI"){
-        e.target.parentElement.classList.toggle("d-none")
-        /*if(mainBar.value===""){
-            displayCards(recipes)   
+    if(e.target && e.target.className.includes("iconU") || e.target.className.includes("iconA") || e.target.className.includes("iconI")){
+        if(mainBar.value===""){
+            e.target.parentElement.remove()
+            displayMatched(recipes, mainBar.value)
         }else{
-            mixMatched(e.target.innerHTML)
-        }*/
+            e.target.parentElement.remove()
+            mixMatched(e)
+        }
     }
 })

@@ -11126,32 +11126,66 @@ textarea.form-control-lg {
   border: none;
 }
 
-.navbar {
+.form-control:focus {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+#navbar > .navbar {
   background-color: #E7E7E7;
+  border-radius: 5px;
   color: #000;
 }
-.navbar ::placeholder {
+#navbar > .navbar ::placeholder {
   opacity: 25%;
 }
 
+#search_dropI, #search_dropA, #search_dropU {
+  color: white;
+}
+#search_dropI::placeholder, #search_dropA::placeholder, #search_dropU::placeholder {
+  color: white;
+  opacity: 50%;
+}
+
 .card {
-  width: 30%;
   height: 364px;
+  border: none;
 }
 .card img {
   max-height: 50%;
+  object-fit: cover;
+  border-radius: 5px 5px 0 0;
+}
+
+.rowTop {
+  line-height: 1.5;
+  vertical-align: middle;
+}
+
+.time {
+  font-weight: 500;
+  text-align: end;
+  vertical-align: bottom;
+}
+
+i {
+  text-align: end;
 }
 
 .description {
-  max-height: 109px;
+  font-size: 12px;
   overflow: hidden;
-  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
 }
 
 .ingredients {
   max-height: 109px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 12px;
+  overflow-y: hidden;
 }
 
 .dropdown-content {
@@ -11166,13 +11200,13 @@ textarea.form-control-lg {
   overflow-y: scroll;
 }
 .dropdown-content ul {
-  list-style-type: none;
   padding: 0;
   columns: 3;
   -webkit-columns: 3;
   -moz-columns: 3;
 }
 .dropdown-content ul li {
+  list-style-type: none;
   cursor: grab;
 }
 
@@ -11186,6 +11220,10 @@ textarea.form-control-lg {
 
 #myDropdown_U {
   background-color: #ED6454;
+}
+
+#myDropdown_I, #myDropdown_A, #myDropdown_U {
+  font-size: 14px;
 }
 
 button {
@@ -11203,6 +11241,14 @@ button {
 #taglist > div {
   color: white;
   cursor: grab;
+}
+#taglist > i {
+  margin-left: 2px;
+}
+
+#navbar::after {
+  display: block;
+  content: attr(data-after);
 }
 
 /*# sourceMappingURL=style.css.map */
