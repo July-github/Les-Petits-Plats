@@ -5,7 +5,7 @@ console.log(recipes);
 /* Create cards */
 function createCard(element){
     const newDiv = document.createElement("div")
-    return element.appendChild(newDiv).classList.add("card", "p-0", "my-3", "mx-1", "col-12", "col-md-5", "col-lg-3")
+    return element.appendChild(newDiv).classList.add("card", "p-0", "my-3", "mx-1","col")
 }
 function createImg(element){
     const newImg = document.createElement("img")
@@ -26,7 +26,7 @@ function createNewRowTop(element){
 }
 function createNewRecipeName(element){
     const newDiv = document.createElement("div")
-    return element.appendChild(newDiv).classList.add("recipe", "col-9", "fs-6")
+    return element.appendChild(newDiv).classList.add("recipe", "col-9", "sm-col-8", "fs-6")
 }
 function createClock(element){
     const newIClock = document.createElement("i")
@@ -40,7 +40,7 @@ function setClock(element){
 }
 function createNewTime(element){
     const newDiv = document.createElement("div")
-    return element.appendChild(newDiv).classList.add("time", "col-2", "fs-6", "p-0")
+    return element.appendChild(newDiv).classList.add("time", "col-2", "sm-col-3", "fs-6", "p-0")
 }
 function createNewRowBottom(element){
     const newDiv = document.createElement("div")
@@ -139,19 +139,24 @@ function createLiIngredient(array, index){
     }
     return recipeCardsIngredients
 }
+function transformCase(array, j){
+    const ingredient = array.ingredients[j].ingredient.toLowerCase()
+    const capIngredient = ingredient[0].toUpperCase() + ingredient.slice(1);
+    return capIngredient
+}
 function fillIngredients(array, index){   
     const recipeCardsIngredients = [...document.querySelectorAll(".ulIngredients")] 
     const ulLis = recipeCardsIngredients[index].querySelectorAll(".ulIngredients > li")
     for (let j=0; j<array.ingredients.length; j++){
         if(array.ingredients[j].unit){
-            ulLis[j].innerHTML = array.ingredients[j].ingredient + ": " + array.ingredients[j].unit
+            ulLis[j].innerHTML = transformCase(array, j) + ": " + array.ingredients[j].unit
         }if(array.ingredients[j].quantity){
-            ulLis[j].innerHTML = array.ingredients[j].ingredient + ": " + array.ingredients[j].quantity
+            ulLis[j].innerHTML = transformCase(array, j) + ": " + array.ingredients[j].quantity
         }if((array.ingredients[j].quantity) && (array.ingredients[j].unit)){
-            ulLis[j].innerHTML = array.ingredients[j].ingredient + ": " + array.ingredients[j].quantity + " " + array.ingredients[j].unit
+            ulLis[j].innerHTML = transformCase(array, j) + ": " + array.ingredients[j].quantity + " " + array.ingredients[j].unit
         }
         else{
-        ulLis[j].innerHTML = array.ingredients[j].ingredient
+        ulLis[j].innerHTML = transformCase(array, j)
         }
     }
     return ulLis
@@ -252,6 +257,7 @@ function getSearchDrop(arrayDrop, index, dropClickType){
         resetDropdowns(index)
         const newArrayDrop = searchDropMatched(arrayDrop, e)
         fillList(newArrayDrop, index)
+        displayOnClickTag()
     })
 }
 getSearchDrop(uniqueListIngredients, 0, "ingredients")
@@ -332,10 +338,9 @@ function tagUMatched(arrayRecipes, input){
     })
     return [...arrayTagUstensils]
 }
-function mixArray(arrayRecipes, input){
-    const x = searchMatched(arrayRecipes, input)
-    const y = tagMatched(arrayRecipes, input)
-    return [...new Set([...x, ...y])]
+function mixArray(input){
+    const arrayTag = testAlreadyTag()
+    return [...searchMatched(arrayTag, input)]
 }
 function displayError(arraySearchMain){
     const errorDiv = document.querySelector("#navbar")
@@ -362,15 +367,20 @@ function displayMatched(arraySearchMain){
     fillList([...new Set(arraySearchUstensils)], 2)
     displayOnClickTag()
 }
-function reduceArray(textParentTag, tagMatched, e){
+function reduceArray(textParentTag, tagMatched){
     for (let i=0; i<textParentTag.length; i++){
-        const z = tagMatched(recipes, textParentTag[i])
-        console.log(z)
-        tagMatched(z, e.target.innerText)
-        return [...tagMatched(z, e.target.innerText)]
+        const arrayTag = tagMatched(recipes, textParentTag[i])
+        tagMatched(arrayTag, textParentTag.slice(-1)[0])
+        return [...tagMatched(arrayTag, textParentTag.slice(-1)[0])]
     }
 }
-function testAlreadyTag(e){
+function reduceMixArray(textParentTagX, tagMatchedX, tagMatchedY, textParentTagY){
+    for (let i=0; i<textParentTagX.length; i++){
+        const arrayTag = tagMatchedX(recipes, textParentTagX[i])
+        return [...tagMatchedY(arrayTag, textParentTagY.slice(-1)[0])]
+    }
+}
+function testAlreadyTag(){
     const testTagI = document.getElementsByClassName("iconI").length
     const testTagA = document.getElementsByClassName("iconA").length
     const testTagU = document.getElementsByClassName("iconU").length
@@ -378,95 +388,45 @@ function testAlreadyTag(e){
     const TagA = document.querySelectorAll(".iconA")
     const TagU = document.querySelectorAll(".iconU")
 
+    const parentTagI = [...TagI].map(TagI => TagI.parentElement, [])
+    const textParentTagI = parentTagI.map(parentTagI => parentTagI.innerText)
+    const parentTagA = [...TagA].map(TagA => TagA.parentElement, [])
+    const textParentTagA = parentTagA.map(parentTagA => parentTagA.innerText)
+    const parentTagU = [...TagU].map(TagU => TagU.parentElement, [])
+    const textParentTagU = parentTagU.map(parentTagU => parentTagU.innerText)
+
     if((testTagI !== 0) && (testTagA === 0) && (testTagU === 0)){
         if(testTagI === 1){
-            const arraySearchMain = tagIMatched(recipes, e.target.innerText)
-            displayMatched(arraySearchMain)
+            return tagIMatched(recipes, textParentTagI.slice(-1)[0])
         }else{
-            const parentTagI = [...TagI].map(TagI => TagI.parentElement, [])
-            const textParentTagI = parentTagI.map(parentTagI => parentTagI.innerText)
-            const arraySearchMain = reduceArray(textParentTagI, tagIMatched, e)
-            displayMatched(arraySearchMain)
+            return reduceArray(textParentTagI, tagIMatched)
         } 
     }if((testTagA !== 0) && (testTagI === 0) && (testTagU === 0)){
         if(testTagA === 1){
-            const arraySearchMain = tagAMatched(recipes, e.target.innerText)
-            displayMatched(arraySearchMain)
+            return tagAMatched(recipes, textParentTagA.slice(-1)[0])
         }else{
-            const parentTagA = [...TagA].map(TagA => TagA.parentElement, [])
-            const textParentTagA = parentTagA.map(parentTagA => parentTagA.innerText)
-            const arraySearchMain = reduceArray(textParentTagA, tagAMatched, e)
-            displayMatched(arraySearchMain)
+            return reduceArray(textParentTagA, tagAMatched)
         } 
     }if((testTagU !== 0) && (testTagA === 0) && (testTagI === 0)){
         if(testTagU === 1){
-            const arraySearchMain = tagUMatched(recipes, e.target.innerText)
-            displayMatched(arraySearchMain)
+            return tagUMatched(recipes, textParentTagU.slice(-1)[0])
         }else{
-            const parentTagU = [...TagU].map(TagU => TagU.parentElement, [])
-            console.log(parentTagU)
-            const textParentTagU = parentTagU.map(parentTagU => parentTagU.innerText)
-            console.log(textParentTagU)
-            const arraySearchMain = reduceArray(textParentTagU, tagUMatched, e)
-            console.log(arraySearchMain)
-            displayMatched(arraySearchMain)
+            return reduceArray(textParentTagU, tagUMatched)
         }
     }if((testTagI !== 0) && (testTagA !== 0) && (testTagU === 0)){
-        const TagIA = [...tagIMatched(recipes, TagI.innerText)]
-        const arraySearchMain = TagIA.reduce(TagIA => tagAMatched(recipes, TagA.innerText))
-        displayMatched(arraySearchMain)
+        return reduceMixArray(textParentTagI, tagIMatched, tagAMatched, textParentTagA)
+
     }if((testTagI !== 0) && (testTagA === 0) && (testTagU !== 0)){
-        const TagIU = [...tagIMatched(recipes, TagI.innerText)]
-        const arraySearchMain = TagIU.reduce(TagIU => tagUMatched(recipes, TagU.innerText))
-        displayMatched(arraySearchMain)
+        return reduceMixArray(textParentTagI, tagIMatched, tagUMatched, textParentTagU)
+
     }if((testTagI === 0) && (testTagA !== 0) && (testTagU !== 0)){
-        const TagAU = [...tagAMatched(recipes, TagA.innerText)]
-        const arraySearchMain = TagAU.reduce(TagAU => tagUMatched(recipes, TagU.innerText))
-        displayMatched(arraySearchMain)
+        return reduceMixArray(textParentTagA, tagAMatched, tagUMatched, textParentTagU)
+
+    }if((testTagI === 0) && (testTagA === 0) && (testTagU === 0)){
+        return recipes
     }
 }
 
-function testExistTag(e){
-    const testTagI = document.getElementsByClassName("iconI").length
-    const testTagA = document.getElementsByClassName("iconA").length
-    const testTagU = document.getElementsByClassName("iconU").length
-    const TagI = document.querySelectorAll(".iconI").parentElement
-    const TagA = document.querySelectorAll(".iconA").parentElement
-    const TagU = document.querySelectorAll(".iconU").parentElement
-    
-    if((testTagI === 0) && (testTagA === 0) && (testTagU === 0)){
-        displayMatched(recipes, mainBar.value)
-    }if((testTagI !== 0) && (testTagA === 0) && (testTagU === 0)){
-        if(TagI === undefined){
-            mixMatched(e)
-        }else{
-        recipes.reduce(recipe => displayMatched(recipe, TagI.innerText))
-        } 
-    }if((testTagA !== 0) && (testTagI === 0) && (testTagU === 0)){
-        if(TagA === undefined){
-            mixMatched(e)
-        }else{
-        recipes.reduce(recipe => displayMatched(recipe, TagA.innerText))
-        } 
-    }if((testTagU !== 0) && (testTagA === 0) && (testTagI === 0)){
-        if(TagU === undefined){
-            mixMatched(e)
-        }else{
-        recipes.reduce(recipe => displayMatched(recipe, TagU.innerText))
-        }
-    }if((testTagI !== 0) && (testTagA !== 0) && (testTagU === 0)){
-        const TagIA = [...recipes.reduce(recipe => displayMatched(recipe, TagI.innerText))]
-        TagIA.reduce(recipes.reduce(recipe => displayMatched(recipe, TagA.innerText)))
-    }if((testTagI !== 0) && (testTagA === 0) && (testTagU !== 0)){
-        const TagIU = [...recipes.reduce(recipe => displayMatched(recipe, TagI.innerText))]
-        TagIU.reduce(recipes.reduce(recipe => displayMatched(recipe, TagU.innerText)))
-    }if((testTagI === 0) && (testTagA !== 0) && (testTagU !== 0)){
-        const TagAU = [...recipes.reduce(recipe => displayMatched(recipe, TagA.innerText))]
-        TagAU.reduce(recipes.reduce(recipe => displayMatched(recipe, TagU.innerText)))
-    }else{
-        displayMatched(recipes, mainBar.value)
-    }
-}
 function validateInputSearch(e){
     //Regex 3 characters creation
     const regexInputSearch = /[a-zA-ZÀ-ÿ]{3,}/g;
@@ -485,7 +445,8 @@ function validateInputSearch(e){
         fillList(uniqueListUstensils, 2)
         displayError(recipes)
     }else{
-        testExistTag(e)
+        const arraySearchMain = mixArray(mainBar.value)
+        displayMatched(arraySearchMain)
     }
 }
 
@@ -521,10 +482,7 @@ function createTag(e, tagType){
         createTag.innerHTML = e.target.innerHTML + '<i class="far fa-times-circle iconA"></i>'
     }
 }
-function mixMatched(e){
-    const toto = searchMatched(recipes, mainBar.value)
-    displayMatched(toto, e.target.innerText)
-}
+
 function displayOnClickTag(){
     const liTagIngredients = document.querySelectorAll("#myDropdown_I > ul > li")
     const liTagUstensils = document.querySelectorAll("#myDropdown_U > ul > li")
@@ -534,9 +492,12 @@ function displayOnClickTag(){
         liTagIngredients[i].addEventListener("click", function(e){
             createTag(e, "ingredients")
             if(mainBar.value===""){
-                testAlreadyTag(e)
+                const arraySearchMain = testAlreadyTag()
+                displayMatched(arraySearchMain)
+                e.target.classList.add("d-none")
             }else{
-                testExistTag(e)
+                const arraySearchMain = mixArray(mainBar.value)
+                displayMatched(arraySearchMain)
             }
         })
     }
@@ -544,9 +505,11 @@ function displayOnClickTag(){
         liTagUstensils[i].addEventListener("click", function(e){
             createTag(e, "ustensils")  
             if(mainBar.value===""){
-                testAlreadyTag(e)
+                const arraySearchMain = testAlreadyTag()
+                displayMatched(arraySearchMain)
             }else{
-                testExistTag(e)
+                const arraySearchMain = mixArray(mainBar.value)
+                displayMatched(arraySearchMain)
             }      
         })
     }
@@ -554,9 +517,11 @@ function displayOnClickTag(){
         liTagApparels[i].addEventListener("click", function(e){
             createTag(e, "apparels") 
             if(mainBar.value===""){
-                testAlreadyTag(e) 
+                const arraySearchMain = testAlreadyTag()
+                displayMatched(arraySearchMain)
             }else{
-                testExistTag(e)
+                const arraySearchMain = mixArray(mainBar.value)
+                displayMatched(arraySearchMain)
             }
         })
     }
@@ -568,10 +533,12 @@ document.addEventListener("click", function(e){
     if(e.target && e.target.className.includes("iconU") || e.target.className.includes("iconA") || e.target.className.includes("iconI")){
         if(mainBar.value===""){
             e.target.parentElement.remove()
-            displayMatched(recipes, mainBar.value)
+            const arraySearchMain = testAlreadyTag()
+            displayMatched(arraySearchMain)
         }else{
             e.target.parentElement.remove()
-            mixMatched(e)
+            const arraySearchMain = mixArray(mainBar.value)
+            displayMatched(arraySearchMain)
         }
     }
 })

@@ -212,7 +212,7 @@ export const recipes = [
             {
                 "ingredient": "Sucre vanillé",
                 "quantity": 1,
-                "unit": "sachets"
+                "unit": "sachet"
 
             }
         ],
@@ -1413,7 +1413,7 @@ export const recipes = [
             {
                 "ingredient": "Sucre vanillé",
                 "quantity": 1,
-                "unit": "sachets"
+                "unit": "sachet"
             }
         ],
         "time": 20,
@@ -1567,7 +1567,7 @@ export const recipes = [
             {
                 "ingredient": "Sucre vanillé",
                 "quantity": 1,
-                "unit": "sachets"
+                "unit": "sachet"
             },
             {
                 "ingredient": "Oeuf",

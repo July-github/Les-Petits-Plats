@@ -11226,6 +11226,14 @@ i {
   font-size: 14px;
 }
 
+.iconI, .iconA, .iconU {
+  margin-left: 10px;
+}
+
+.fas.fa-angle-up {
+  cursor: grab;
+}
+
 button {
   border: none;
   color: white;
