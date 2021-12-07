@@ -5,7 +5,7 @@ console.log(recipes);
 /* Create cards */
 function createCard(element){
     const newDiv = document.createElement("div")
-    return element.appendChild(newDiv).classList.add("card", "p-0", "my-3", "mx-1","col")
+    return element.appendChild(newDiv).classList.add("card", "p-0", "my-3", "mx-1",  "col")
 }
 function createImg(element){
     const newImg = document.createElement("img")
@@ -211,12 +211,13 @@ const uniqueListUstensils = [...new Set(listUstensils)]
 const uniqueListApparels = [...new Set(ListApparel)]
 
 /*Fill dropdowns buttons with lists*/
-const ulLists = document.querySelectorAll(".p_dropbtn") 
 function createLi(index){
+    const ulLists = document.querySelectorAll(".p_dropbtn") 
     let listDropdown = document.createElement("li");
     ulLists[index].appendChild(listDropdown);
 }
 function fillList(array, index){
+    const ulLists = document.querySelectorAll(".p_dropbtn") 
     for(let i=0; i<array.length; i++){
         createLi(index)
         let list = ulLists[index].querySelectorAll("li");
@@ -269,13 +270,13 @@ function displayList(){
     const showLists = [...document.querySelectorAll(".dropbtn")]
     showLists.map(showList => showList.addEventListener("click", function(){
         showList.nextElementSibling.classList.toggle("d-block")
-        })
-    )
+        }))
 }
 function closeList(){
     const closeLists = [...document.querySelectorAll(".dropdown-content > nav > i")]
     closeLists.map(closeList => closeList.addEventListener("click", function(){
         closeList.parentElement.parentElement.classList.remove("d-block")
+
     }))
 }
 displayList();
@@ -291,6 +292,32 @@ function standardize(item){
 }
 
 /* Display matched cards & dropdowns */
+/* Boucles natives */
+
+function searchMatch(arrayRecipes, input){
+    let arraySearchMain = []
+    const standardizedInput = standardize(input)
+    for(let i=0; i<arrayRecipes.length; i++){
+        let lowerName = standardize(arrayRecipes[i].name)
+        let lowerDescription = standardize(arrayRecipes[i].description)
+
+        if(lowerName.includes(standardizedInput)){
+            arraySearchMain.push(arrayRecipes[i])
+        }
+        if(lowerDescription.includes(standardizedInput)){
+            arraySearchMain.push(arrayRecipes[i])
+        }
+        for(let j=0; j<arrayRecipes[i].ingredients.length; j++){
+            let lowerIngredient = standardize(arrayRecipes[i].ingredients[j].ingredient)
+            if(lowerIngredient.includes(standardizedInput)){
+                arraySearchMain.push(arrayRecipes[i])
+            }
+        }
+    }
+    return arraySearchMain
+}
+
+/* Prog fonctionnelle */
 function searchMatched(arrayRecipes, input){
     const standardizedInput = standardize(input)
     const arraySearchName = arrayRecipes.filter(arrayRecipe => standardize(arrayRecipe.name).includes(standardizedInput))
@@ -427,7 +454,7 @@ function testAlreadyTag(){
     }
 }
 
-function validateInputSearch(e){
+function validateInputSearch(){
     //Regex 3 characters creation
     const regexInputSearch = /[a-zA-ZÀ-ÿ]{3,}/g;
     //const stringInputSearch = mainBar.textContent.toString()
@@ -482,49 +509,39 @@ function createTag(e, tagType){
         createTag.innerHTML = e.target.innerHTML + '<i class="far fa-times-circle iconA"></i>'
     }
 }
-
+function displayTag(){
+    if(mainBar.value===""){
+        const arraySearchMain = testAlreadyTag()
+        displayMatched(arraySearchMain)
+    }else{
+        const arraySearchMain = mixArray(mainBar.value)
+        displayMatched(arraySearchMain)
+    }
+}
 function displayOnClickTag(){
-    const liTagIngredients = document.querySelectorAll("#myDropdown_I > ul > li")
-    const liTagUstensils = document.querySelectorAll("#myDropdown_U > ul > li")
-    const liTagApparels = document.querySelectorAll("#myDropdown_A > ul > li")
+    const liTagIngredients = [...document.querySelectorAll("#myDropdown_I > ul > li")]
+    const liTagUstensils = [...document.querySelectorAll("#myDropdown_U > ul > li")]
+    const liTagApparels = [...document.querySelectorAll("#myDropdown_A > ul > li")]
 
-    for(let i=0; i<liTagIngredients.length; i++){
-        liTagIngredients[i].addEventListener("click", function(e){
+    liTagIngredients.map(liTagIngredient => 
+        liTagIngredient.addEventListener("click", function(e){
             createTag(e, "ingredients")
-            if(mainBar.value===""){
-                const arraySearchMain = testAlreadyTag()
-                displayMatched(arraySearchMain)
-                e.target.classList.add("d-none")
-            }else{
-                const arraySearchMain = mixArray(mainBar.value)
-                displayMatched(arraySearchMain)
-            }
+            displayTag()
+            liTagIngredient.classList.add("disabled");
         })
-    }
-    for(let i=0; i<liTagUstensils.length; i++){    
-        liTagUstensils[i].addEventListener("click", function(e){
+    )
+    liTagUstensils.map(liTagUstensil => 
+        liTagUstensil.addEventListener("click", function(e){
             createTag(e, "ustensils")  
-            if(mainBar.value===""){
-                const arraySearchMain = testAlreadyTag()
-                displayMatched(arraySearchMain)
-            }else{
-                const arraySearchMain = mixArray(mainBar.value)
-                displayMatched(arraySearchMain)
-            }      
+            displayTag()
         })
-    }
-    for(let i=0; i<liTagApparels.length; i++){
-        liTagApparels[i].addEventListener("click", function(e){
+    )
+    liTagApparels.map(liTagApparel => 
+        liTagApparel.addEventListener("click", function(e){
             createTag(e, "apparels") 
-            if(mainBar.value===""){
-                const arraySearchMain = testAlreadyTag()
-                displayMatched(arraySearchMain)
-            }else{
-                const arraySearchMain = mixArray(mainBar.value)
-                displayMatched(arraySearchMain)
-            }
+            displayTag()
         })
-    }
+    )
 }
 displayOnClickTag()
 
@@ -541,4 +558,12 @@ document.addEventListener("click", function(e){
             displayMatched(arraySearchMain)
         }
     }
+})
+document.addEventListener("click", function(){
+    const showLists = [...document.querySelectorAll(".dropdown-content")]
+    showLists.map(showList => function(){
+        if(showList.classList.includes("d-block")){
+            showList.classList.remove("d-block")
+        }
+    })
 })

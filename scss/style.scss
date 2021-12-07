@@ -81,7 +81,11 @@ i{
             cursor: grab;
         }
     }
-  }
+}
+.disabled{
+    pointer-events:none;
+    opacity:0.5;
+}
 #myDropdown_I{
       background-color: $primary;
   }
@@ -92,7 +96,7 @@ i{
     background-color: $danger;
 }
 #myDropdown_I, #myDropdown_A, #myDropdown_U{
-  font-size: 14px;
+    font-size: 14px;
 }
 .iconI, .iconA, .iconU{
     margin-left: 10px;
