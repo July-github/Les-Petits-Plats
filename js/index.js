@@ -397,13 +397,13 @@ function displayMatched(arraySearchMain){
 function reduceArray(textParentTag, tagMatched){
     for (let i=0; i<textParentTag.length; i++){
         const arrayTag = tagMatched(recipes, textParentTag[i])
-        tagMatched(arrayTag, textParentTag.slice(-1)[0])
         return [...tagMatched(arrayTag, textParentTag.slice(-1)[0])]
     }
 }
 function reduceMixArray(textParentTagX, tagMatchedX, tagMatchedY, textParentTagY){
-    for (let i=0; i<textParentTagX.length; i++){
-        const arrayTag = tagMatchedX(recipes, textParentTagX[i])
+    const reducedX = reduceArray(textParentTagX, tagMatchedX)
+    for (let i=0; i<textParentTagY.length; i++){
+        const arrayTag = tagMatchedY(reducedX, textParentTagY[i])
         return [...tagMatchedY(arrayTag, textParentTagY.slice(-1)[0])]
     }
 }
@@ -527,7 +527,6 @@ function displayOnClickTag(){
         liTagIngredient.addEventListener("click", function(e){
             createTag(e, "ingredients")
             displayTag()
-            liTagIngredient.classList.add("disabled");
         })
     )
     liTagUstensils.map(liTagUstensil => 
