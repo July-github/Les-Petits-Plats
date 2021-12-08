@@ -4,3 +4,11 @@ $blue:#3282F7;
 $green : #68D9A4;
 $red: #ED6454;
 
+$grid-breakpoints: (
+  xs: 0,
+  sm: 600px,
+  md: 768px,
+  lg: 838px,
+  xl: 1200px,
+  xxl: 1400px
+)

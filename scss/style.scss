@@ -27,11 +27,24 @@
 .card{
     height: 364px;
     border: none;
+    width:30%;
 
     & img{
         max-height: 50%;
         object-fit: cover;
         border-radius: 5px 5px 0 0;
+    }
+}
+@media all and (min-width: 817px) and (max-width: 1200px)
+{
+    .card{
+        width:48%;
+    }
+}
+@media all and (max-width: 817px)
+{
+    .card{
+        width:100%;
     }
 }
 
@@ -67,8 +80,8 @@ i{
     border-radius: 5px;
     text-align: start;
     max-height: 250px;
-    max-width: 50%;
     overflow-y: scroll;
+    top:0;
 
     & ul{
         padding: 0;
@@ -91,6 +104,13 @@ i{
   }
 #myDropdown_A{
     background-color: $success;
+    margin-left: 16px;
+}
+@media all and (max-width: 838px)
+{
+    #myDropdown_A{
+        margin-left: 0;
+    }
 }
 #myDropdown_U{
     background-color: $danger;
@@ -110,6 +130,15 @@ button{
     border-radius: 5px;
     padding-left: 1rem;
     cursor: grab;
+}
+@media all and (max-width: 838px)
+{
+    .dropdown > div{
+        width:100%
+    }
+}
+.dropbtn{
+    height: 50px;
 }
 #taglist{
     justify-content: flex-start;

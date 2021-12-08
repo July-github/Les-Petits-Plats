@@ -30,8 +30,9 @@
         </div>
         <div id="taglist" class="m-2 d-flex flex-wrap"></div>
         <div class="container-fluid">
-        <div class="dropdown d-flex justify-content-center d-flex justify-content-md-start">
-          <button class="dropbtn bg-primary" id="listI">Ingrédients<i class="fas fa-angle-down m-3"></i></button>
+        <div class="dropdown d-flex flex-lg-row flex-column align-items-center justify-content-lg-start">
+          <div>
+          <button class="dropbtn bg-primary my-2 my-lg-0" id="listI">Ingrédients<i class="fas fa-angle-down m-3"></i></button>
           <div id="myDropdown_I" class="dropdown-content">
             <nav class="navbar navbar-expand rounded-5">
               <form class="form-inline w-100">
@@ -41,7 +42,9 @@
             </nav>
             <ul class="p_dropbtn mx-3 my-bottom-3 my-top-1"></ul>
           </div>
-          <button class="dropbtn bg-success mx-3" id="listA">Appareil<i class="fas fa-angle-down m-3"></i></button>
+          </div>
+          <div>
+          <button class="dropbtn bg-success mx-0 mx-lg-3 my-2 my-lg-0" id="listA">Appareil<i class="fas fa-angle-down ms-4 me-3 my-3"></i></button>
           <div id="myDropdown_A" class="dropdown-content">
               <nav class="navbar navbar-expand rounded-5">
                 <form class="form-inline w-100">
@@ -51,7 +54,9 @@
               </nav>
             <ul class="p_dropbtn mx-3 my-bottom-3 my-top-1"></ul>
           </div>
-          <button class="dropbtn bg-danger" id="listU">Ustensiles<i class="fas fa-angle-down m-3"></i></button>
+          </div>
+          <div>
+          <button class="dropbtn bg-danger my-2 my-lg-0" id="listU">Ustensiles<i class="fas fa-angle-down m-3"></i></button>
           <div id="myDropdown_U" class="dropdown-content">
               <nav class="navbar navbar-expand rounded-5">
                 <form class="form-inline w-100">
@@ -61,10 +66,10 @@
               </nav>
             <ul class="p_dropbtn mx-3 my-bottom-3 my-top-1"></ul>
           </div>
+          </div>
         </div>
-        </div>
-        <div class="container-fluid">
-          <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 d-flex flex-wrap justify-content-center justify-content-md-between m-0" id="cards">   
+        <div class="container-fluid p-0">
+          <div class="row d-flex flex-wrap justify-content-center justify-content-md-between m-0" id="cards">   
           </div>
         </div>
     

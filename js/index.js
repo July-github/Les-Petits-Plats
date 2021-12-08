@@ -5,7 +5,7 @@ console.log(recipes);
 /* Create cards */
 function createCard(element){
     const newDiv = document.createElement("div")
-    return element.appendChild(newDiv).classList.add("card", "p-0", "my-3", "mx-1",  "col")
+    return element.appendChild(newDiv).classList.add("card", "p-0", "my-3", "mx-0")
 }
 function createImg(element){
     const newImg = document.createElement("img")
@@ -26,7 +26,7 @@ function createNewRowTop(element){
 }
 function createNewRecipeName(element){
     const newDiv = document.createElement("div")
-    return element.appendChild(newDiv).classList.add("recipe", "col-9", "sm-col-8", "fs-6")
+    return element.appendChild(newDiv).classList.add("recipe", "col-8", "fs-6")
 }
 function createClock(element){
     const newIClock = document.createElement("i")
@@ -40,7 +40,7 @@ function setClock(element){
 }
 function createNewTime(element){
     const newDiv = document.createElement("div")
-    return element.appendChild(newDiv).classList.add("time", "col-2", "sm-col-3", "fs-6", "p-0")
+    return element.appendChild(newDiv).classList.add("time", "col-3", "p-0")
 }
 function createNewRowBottom(element){
     const newDiv = document.createElement("div")
@@ -216,6 +216,9 @@ function createLi(index){
     let listDropdown = document.createElement("li");
     ulLists[index].appendChild(listDropdown);
 }
+function disableClick(el){ 
+    el.classList.add("disabled"); 
+}
 function fillList(array, index){
     const ulLists = document.querySelectorAll(".p_dropbtn") 
     for(let i=0; i<array.length; i++){
@@ -270,13 +273,21 @@ function displayList(){
     const showLists = [...document.querySelectorAll(".dropbtn")]
     showLists.map(showList => showList.addEventListener("click", function(){
         showList.nextElementSibling.classList.toggle("d-block")
-        }))
+        const dropContent = showList.nextElementSibling
+        showList.style.width = "400px"
+        dropContent.style.width = "400px"
+        }
+    ))
 }
 function closeList(){
     const closeLists = [...document.querySelectorAll(".dropdown-content > nav > i")]
     closeLists.map(closeList => closeList.addEventListener("click", function(){
-        closeList.parentElement.parentElement.classList.remove("d-block")
-
+        const parentCloseList = closeList.parentElement.parentElement
+        parentCloseList.classList.remove("d-block")
+        parentCloseList.style.width = "auto"
+        const showLists = [...document.querySelectorAll(".dropbtn")]
+        showLists.map(showList => showList.style.width = "initial")
+    
     }))
 }
 displayList();
@@ -527,6 +538,9 @@ function displayOnClickTag(){
         liTagIngredient.addEventListener("click", function(e){
             createTag(e, "ingredients")
             displayTag()
+            //const disable = document.classList.add("disabled"); 
+            liTagIngredient.className = "disabled"
+            console.log(liTagIngredient)
         })
     )
     liTagUstensils.map(liTagUstensil => 
