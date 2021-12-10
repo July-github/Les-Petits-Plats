@@ -246,42 +246,48 @@ createLi(uniqueListIngredients, "ingredients")
 createLi(uniqueListApparels, "apparels")
 createLi(uniqueListUstensils, "ustensils")
 
-function resetDropdowns(ulType){
-    const getUlType = getUl(ulType)    
-    const ulList = document.querySelector(getUlType)
-    while(ulList.querySelector("li")){
-        ulList.removeChild(ulList.querySelector("li"))
-    }
-}
 /* Search bar Dropdowns */
-function searchDropMatched(arrayDrop, e){
+function searchDropMatched(arrayDrops, e){
     const standardizedInput = standardize(e.target.value)
-    const newListDrop = arrayDrop.filter(item => standardize(item).includes(standardizedInput))
+    const newListDrop = arrayDrops.filter(function(arrayDrop){
+        if((standardize(arrayDrop.innerText)).includes(standardizedInput)){
+            arrayDrop.classList.remove("d-none")
+            return arrayDrop
+        }else{
+            return arrayDrop.classList.add("d-none")
+        }
+    })
     return newListDrop
-}
-function getDropClick(dropClickType){
-    switch(dropClickType){
-        case "ing":
-            return "search_dropI";
-        case "ust":
-            return "search_dropU";
-        case "app":
-            return "search_dropA";
-    }
-}
-function getSearchDrop(arrayDrop, ulType, dropClickType){
-    const getArrayDrop = getDropClick(dropClickType)
-    const searchDrop = document.getElementById(getArrayDrop)
+}      
+
+function getSearchDropI(){
+    const searchDrop = document.getElementById("search_dropI")
     searchDrop.addEventListener("input", function(e) {
-        resetDropdowns(ulType)
-        const newArrayDrop = searchDropMatched(arrayDrop, e)
-        createLi(newArrayDrop, ulType)
+        const liTagIngredients = [...document.querySelectorAll("#myDropdown_I > ul > li")]
+        searchDropMatched(liTagIngredients, e)
         displayOnClickTag()
     })
 }
-getSearchDrop(uniqueListIngredients,"ingredients", "ing")
-getSearchDrop(uniqueListApparels,"apparels", "app")
-getSearchDrop(uniqueListUstensils,"ustensils", "ust")
+function getSearchDropU(){
+    const searchDrop = document.getElementById("search_dropU")
+    searchDrop.addEventListener("input", function(e) {
+        const liTagUstensils = [...document.querySelectorAll("#myDropdown_U > ul > li")]
+        searchDropMatched(liTagUstensils, e)
+        displayOnClickTag()
+    })
+}
+function getSearchDropA(){
+    const searchDrop = document.getElementById("search_dropA")
+    searchDrop.addEventListener("input", function(e) {
+        const liTagApparels = [...document.querySelectorAll("#myDropdown_A > ul > li")]
+        searchDropMatched(liTagApparels, e)
+        displayOnClickTag()
+    })
+}
+
+getSearchDropI()
+getSearchDropU()
+getSearchDropA()
 
 /* Display & close list on click*/
 function displayList(){
@@ -374,15 +380,6 @@ function displayMatched(arraySearchMain){
     removeCardsBlock()
     createCardsBlock(arraySearchMain)
     displayCards(arraySearchMain)
-    resetDropdowns("ingredients")
-    resetDropdowns("apparels")
-    resetDropdowns("ustensils")
-    const arraySearchIngredients = [...new Set(getListsI(arraySearchMain))]
-    const arraySearchAppliance = [...new Set(getListsA(arraySearchMain))]
-    const arraySearchUstensils = [...new Set(getListsU(arraySearchMain))]
-    createLi(arraySearchIngredients, "ingredients")
-    createLi(arraySearchAppliance, "apparels")
-    createLi(arraySearchUstensils, "ustensils")
     displayOnClickTag()
 }
 
@@ -396,12 +393,9 @@ function validateInputSearch(){
         removeCardsBlock()
         createCardsBlock(recipes)
         displayCards(recipes)
-        resetDropdowns("ingredients")
-        createLi(uniqueListIngredients, "ingredients")
-        resetDropdowns("apparels")
-        createLi(uniqueListApparels, "apparels")
-        resetDropdowns("ustensils")
-        createLi(uniqueListUstensils, "ustensils")
+        displayListDropI(recipes)
+        displayListDropU(recipes)
+        displayListDropA(recipes)
         displayError(recipes)
     }else{
         const arraySearchMain = mixArray(mainBar.value)
@@ -444,13 +438,70 @@ function createTag(e, tagType){
 }
 
 /** Tags display **/
+function testEquality(arraySearchMain, liTagIngredient){
+    let validRecipe = false
+    arraySearchMain.map(item => {
+        item.ingredients.forEach(el => {
+            if((el.ingredient) === (liTagIngredient.textContent)){
+            return validRecipe = true
+            }
+        })
+    })
+    return validRecipe
+}
+function displayListDropI(arraySearchMain){
+    const liTagIngredients = [...document.querySelectorAll("#myDropdown_I > ul > li")]
+    liTagIngredients.filter(liTagIngredient => testEquality(arraySearchMain, liTagIngredient))
+    liTagIngredients.map(liTagIngredient =>{
+        if(testEquality(arraySearchMain, liTagIngredient) === false){
+            liTagIngredient.classList.add("d-none")
+    }else{
+        liTagIngredient.classList.remove("d-none")
+    }
+})
+}
+function displayListDropU(arraySearchMain){
+    const liTagUstensils = [...document.querySelectorAll("#myDropdown_U > ul > li")]
+    liTagUstensils.filter(liTagUstensil => testEquality(arraySearchMain, liTagUstensil))
+    liTagUstensils.map(liTagUstensil =>{
+        if(testEquality(arraySearchMain, liTagUstensil) === false){
+            liTagUstensil.classList.add("d-none")
+    }else{
+        liTagUstensil.classList.remove("d-none")
+    }
+})
+}
+function displayListDropA(arraySearchMain){
+    const liTagApparels = [...document.querySelectorAll("#myDropdown_A > ul > li")]
+    liTagApparels.filter(liTagApparel => testEquality(arraySearchMain, liTagApparel))
+    liTagApparels.map(liTagApparel =>{
+        if(testEquality(arraySearchMain, liTagApparel) === false){
+            liTagApparel.classList.add("d-none")
+    }else{
+        liTagApparel.classList.remove("d-none")
+    }
+})
+}
 function displayTag(){
     if(mainBar.value===""){
         const arraySearchMain = testAlreadyTag()
-        displayMatched(arraySearchMain)
+        console.log(arraySearchMain)
+        displayError(arraySearchMain)
+        removeCardsBlock()
+        createCardsBlock(arraySearchMain)
+        displayCards(arraySearchMain)
+        displayListDropI(arraySearchMain)
+        displayListDropU(arraySearchMain)
+        displayListDropA(arraySearchMain)
     }else{
         const arraySearchMain = mixArray(mainBar.value)
-        displayMatched(arraySearchMain)
+        displayError(arraySearchMain)
+        removeCardsBlock()
+        createCardsBlock(arraySearchMain)
+        displayCards(arraySearchMain)
+        displayListDropI(arraySearchMain)
+        displayListDropU(arraySearchMain)
+        displayListDropA(arraySearchMain)
     }
 }
 function displayOnClickTag(){
@@ -460,20 +511,21 @@ function displayOnClickTag(){
 
     liTagIngredients.map(liTagIngredient => 
         liTagIngredient.addEventListener("click", function(e){
-            liTagIngredient.classList.add("disabled")
-            console.log(liTagIngredient)
+            e.target.classList.add("disabled")
             createTag(e, "ingredients")
-            displayTag()
-        })
-    )
+            displayTag(e)
+            })
+        )
     liTagUstensils.map(liTagUstensil => 
         liTagUstensil.addEventListener("click", function(e){
+            e.target.classList.add("disabled")
             createTag(e, "ustensils")  
             displayTag()
         })
     )
     liTagApparels.map(liTagApparel => 
         liTagApparel.addEventListener("click", function(e){
+            e.target.classList.add("disabled")
             createTag(e, "apparels") 
             displayTag()
         })
@@ -487,15 +539,61 @@ document.addEventListener("click", function(e){
         if(mainBar.value===""){
             e.target.parentElement.remove()
             const arraySearchMain = testAlreadyTag()
-            displayMatched(arraySearchMain)
+            console.log(arraySearchMain)
+            displayError(arraySearchMain)
+            removeCardsBlock()
+            createCardsBlock(arraySearchMain)
+            displayCards(arraySearchMain)
+            displayListDropI(arraySearchMain)
+            displayListDropU(arraySearchMain)
+            displayListDropA(arraySearchMain)
+            removeDisabledI(e)
+            removeDisabledU(e)
+            removeDisabledA(e)
+            
         }else{
             e.target.parentElement.remove()
             const arraySearchMain = mixArray(mainBar.value)
-            displayMatched(arraySearchMain)
+            displayError(arraySearchMain)
+            removeCardsBlock()
+            createCardsBlock(arraySearchMain)
+            displayCards(arraySearchMain)
+            displayListDropI(arraySearchMain)
+            displayListDropU(arraySearchMain)
+            displayListDropA(arraySearchMain)
+            removeDisabledI(e)
+            removeDisabledU(e)
+            removeDisabledA(e)
         }
     }
 })
-
+function removeDisabledI(e){
+    const liTagIngredients = [...document.querySelectorAll("#myDropdown_I > ul > li")]
+    liTagIngredients.map(liTagIngredient =>{
+        if(e.target.parentElement.innerText === liTagIngredient.innerText){
+            console.log(liTagIngredient.innerText)
+            liTagIngredient.classList.remove("disabled")
+        }
+    })
+}
+function removeDisabledU(e){
+    const liTagUstensils = [...document.querySelectorAll("#myDropdown_U > ul > li")]
+    liTagUstensils.map(liTagUstensil =>{
+        if(e.target.parentElement.innerText === liTagUstensil.innerText){
+            console.log(liTagUstensil.innerText)
+            liTagUstensil.classList.remove("disabled")
+        }
+    })
+}
+function removeDisabledA(e){
+    const liTagApparels = [...document.querySelectorAll("#myDropdown_A > ul > li")]
+    liTagApparels.map(liTagApparel =>{
+        if(e.target.parentElement.innerText === liTagApparel.innerText){
+            console.log(liTagApparel.innerText)
+            liTagApparel.classList.remove("disabled")
+        }
+    })
+}
 /***** Mix filters *****/
 /** Filter list dropdowns depending on tags **/
 function tagIMatched(arrayRecipes, input){
