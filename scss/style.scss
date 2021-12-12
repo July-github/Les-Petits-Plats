@@ -1,6 +1,9 @@
 @import "../scss/variable_overrides.scss";
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
 
+body{
+    font-family: 'lato';
+}
 .form-control{
     border: none;
 }
@@ -25,7 +28,7 @@
     }
 }
 .card{
-    height: 364px;
+    //height: 364px;
     border: none;
     width:30%;
 
@@ -61,16 +64,19 @@ i{
     text-align: end;
 }
 .description{
+    font-family: 'roboto';
     font-size: 12px;
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 6;
+    -webkit-line-clamp: 9;
     -webkit-box-orient: vertical;
+    line-height: 12px;
 }
 .ingredients{
     max-height: 109px;
     font-size: 12px;
     overflow-y: hidden;
+    line-height: 14px;
 }
 .dropdown-content {
     display: none;
@@ -93,6 +99,12 @@ i{
             list-style-type: none;
             cursor: grab;
         }
+    }
+}
+@media all and (max-width: 838px)
+{
+    .dropdown-content > ul{
+        columns: 2;
     }
 }
 .disabled{
@@ -155,4 +167,7 @@ button{
 #navbar::after{
     display: block;
     content: attr(data-after);
+}
+div{
+    box-sizing: border-box;
 }

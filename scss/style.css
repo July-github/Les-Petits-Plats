@@ -11970,6 +11970,10 @@ fieldset:disabled .btn {
   }
 }
 
+body {
+  font-family: 'lato';
+}
+
 .form-control {
   border: none;
 }
@@ -12028,7 +12032,6 @@ fieldset:disabled .btn {
 }
 
 .card {
-  height: 364px;
   border: none;
   width: 30%;
 }
@@ -12068,17 +12071,20 @@ i {
 }
 
 .description {
+  font-family: 'roboto';
   font-size: 12px;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 6;
+  -webkit-line-clamp: 9;
   -webkit-box-orient: vertical;
+  line-height: 12px;
 }
 
 .ingredients {
   max-height: 109px;
   font-size: 12px;
   overflow-y: hidden;
+  line-height: 14px;
 }
 
 .dropdown-content {
@@ -12104,6 +12110,13 @@ i {
   list-style-type: none;
   cursor: -webkit-grab;
   cursor: grab;
+}
+
+@media all and (max-width: 838px) {
+  .dropdown-content > ul {
+    -webkit-columns: 2;
+            columns: 2;
+  }
 }
 
 .disabled {
@@ -12182,5 +12195,10 @@ button {
 #navbar::after {
   display: block;
   content: attr(data-after);
+}
+
+div {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 /*# sourceMappingURL=style.css.map */

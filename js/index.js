@@ -1,4 +1,5 @@
 import {recipes} from "./recipes.js";
+import "./cards_creation.js";
 console.log(recipes);
 
 /***** Cards *****/
@@ -22,7 +23,7 @@ function createCardBody(element){
 }
 function createNewRowTop(element){
     const newDiv = document.createElement("div")
-    return element.appendChild(newDiv).classList.add("row", "rowTop", "my-2", "w-100", "flex-nowrap")
+    return element.appendChild(newDiv).classList.add("row", "rowTop", "mb-3", "w-100", "flex-nowrap")
 }
 function createNewRecipeName(element){
     const newDiv = document.createElement("div")
@@ -108,7 +109,6 @@ function removeCardsBlock(){
         document.getElementById("cards").removeChild(document.querySelector(".card"));
     }
 }
-
 /* Fill cards */
 function fillRecipesName(array){
     const recipeCardsNames = [...document.querySelectorAll(".recipe")]
@@ -249,23 +249,31 @@ createLi(uniqueListUstensils, "ustensils")
 /* Search bar Dropdowns */
 function searchDropMatched(arrayDrops, e){
     const standardizedInput = standardize(e.target.value)
-    const newListDrop = arrayDrops.filter(function(arrayDrop){
-        if((standardize(arrayDrop.innerText)).includes(standardizedInput)){
-            arrayDrop.classList.remove("d-none")
-            return arrayDrop
-        }else{
-            return arrayDrop.classList.add("d-none")
-        }
-    })
-    return newListDrop
+        const newListDrop = arrayDrops.filter(function(arrayDrop){
+            if((standardize(arrayDrop.innerText)).includes(standardizedInput)){
+                arrayDrop.classList.remove("d-none")
+                return arrayDrop    
+            }else{
+                if(arrayDrop.classList.contains("d-none")){
+                    return arrayDrop    
+                }else{
+                    arrayDrop.classList.add("d-none")
+                    return arrayDrop    
+                }
+            }
+        })
+        return newListDrop
 }      
 
 function getSearchDropI(){
     const searchDrop = document.getElementById("search_dropI")
     searchDrop.addEventListener("input", function(e) {
         const liTagIngredients = [...document.querySelectorAll("#myDropdown_I > ul > li")]
-        searchDropMatched(liTagIngredients, e)
-        displayOnClickTag()
+        if(mainBar.value ===""){
+            searchDropMatched(liTagIngredients, e)
+        }else{
+            searchDropMatched(liTagIngredients, e)
+        }
     })
 }
 function getSearchDropU(){
@@ -273,7 +281,6 @@ function getSearchDropU(){
     searchDrop.addEventListener("input", function(e) {
         const liTagUstensils = [...document.querySelectorAll("#myDropdown_U > ul > li")]
         searchDropMatched(liTagUstensils, e)
-        displayOnClickTag()
     })
 }
 function getSearchDropA(){
@@ -281,7 +288,6 @@ function getSearchDropA(){
     searchDrop.addEventListener("input", function(e) {
         const liTagApparels = [...document.querySelectorAll("#myDropdown_A > ul > li")]
         searchDropMatched(liTagApparels, e)
-        displayOnClickTag()
     })
 }
 
@@ -380,7 +386,9 @@ function displayMatched(arraySearchMain){
     removeCardsBlock()
     createCardsBlock(arraySearchMain)
     displayCards(arraySearchMain)
-    displayOnClickTag()
+    displayListDropI(arraySearchMain)
+    displayListDropU(arraySearchMain)
+    displayListDropA(arraySearchMain)
 }
 
 function validateInputSearch(){
@@ -389,18 +397,9 @@ function validateInputSearch(){
     //const stringInputSearch = mainBar.textContent.toString()
     const validInputSearch = regexInputSearch.test(mainBar.value);
 
-    if(validInputSearch === false){
-        removeCardsBlock()
-        createCardsBlock(recipes)
-        displayCards(recipes)
-        displayListDropI(recipes)
-        displayListDropU(recipes)
-        displayListDropA(recipes)
-        displayError(recipes)
-    }else{
+    if(validInputSearch === true){
         const arraySearchMain = mixArray(mainBar.value)
-        displayMatched(arraySearchMain)
-    }
+        displayMatched(arraySearchMain)    }
 }
 
 /* Listen to a change in the search bar */
@@ -438,22 +437,42 @@ function createTag(e, tagType){
 }
 
 /** Tags display **/
-function testEquality(arraySearchMain, liTagIngredient){
+function testEqualityI(arraySearchMain, liTagIngredient){
     let validRecipe = false
     arraySearchMain.map(item => {
         item.ingredients.forEach(el => {
-            if((el.ingredient) === (liTagIngredient.textContent)){
+            if((standardize(el.ingredient)) === (standardize(liTagIngredient.textContent))){
             return validRecipe = true
             }
         })
     })
     return validRecipe
 }
+function testEqualityU(arraySearchMain, liTagUstensil){
+    let validRecipe = false
+    arraySearchMain.map(item => {
+        item.ustensils.forEach(el => {
+            if((standardize(el)) === (standardize(liTagUstensil.textContent))){
+            return validRecipe = true
+            }
+        })
+    })
+    return validRecipe
+}
+function testEqualityA(arraySearchMain, liTagApparel){
+    let validRecipe = false
+    arraySearchMain.forEach(item => {
+            if((standardize(item.appliance)) === (standardize(liTagApparel.textContent))){
+            return validRecipe = true
+            }
+        })
+        return validRecipe
+}
 function displayListDropI(arraySearchMain){
     const liTagIngredients = [...document.querySelectorAll("#myDropdown_I > ul > li")]
-    liTagIngredients.filter(liTagIngredient => testEquality(arraySearchMain, liTagIngredient))
+    liTagIngredients.filter(liTagIngredient => testEqualityI(arraySearchMain, liTagIngredient))
     liTagIngredients.map(liTagIngredient =>{
-        if(testEquality(arraySearchMain, liTagIngredient) === false){
+        if(testEqualityI(arraySearchMain, liTagIngredient) === false){
             liTagIngredient.classList.add("d-none")
     }else{
         liTagIngredient.classList.remove("d-none")
@@ -462,9 +481,9 @@ function displayListDropI(arraySearchMain){
 }
 function displayListDropU(arraySearchMain){
     const liTagUstensils = [...document.querySelectorAll("#myDropdown_U > ul > li")]
-    liTagUstensils.filter(liTagUstensil => testEquality(arraySearchMain, liTagUstensil))
+    liTagUstensils.filter(liTagUstensil => testEqualityU(arraySearchMain, liTagUstensil))
     liTagUstensils.map(liTagUstensil =>{
-        if(testEquality(arraySearchMain, liTagUstensil) === false){
+        if(testEqualityU(arraySearchMain, liTagUstensil) === false){
             liTagUstensil.classList.add("d-none")
     }else{
         liTagUstensil.classList.remove("d-none")
@@ -473,9 +492,9 @@ function displayListDropU(arraySearchMain){
 }
 function displayListDropA(arraySearchMain){
     const liTagApparels = [...document.querySelectorAll("#myDropdown_A > ul > li")]
-    liTagApparels.filter(liTagApparel => testEquality(arraySearchMain, liTagApparel))
+    liTagApparels.filter(liTagApparel => testEqualityA(arraySearchMain, liTagApparel))
     liTagApparels.map(liTagApparel =>{
-        if(testEquality(arraySearchMain, liTagApparel) === false){
+        if(testEqualityA(arraySearchMain, liTagApparel) === false){
             liTagApparel.classList.add("d-none")
     }else{
         liTagApparel.classList.remove("d-none")
@@ -486,22 +505,10 @@ function displayTag(){
     if(mainBar.value===""){
         const arraySearchMain = testAlreadyTag()
         console.log(arraySearchMain)
-        displayError(arraySearchMain)
-        removeCardsBlock()
-        createCardsBlock(arraySearchMain)
-        displayCards(arraySearchMain)
-        displayListDropI(arraySearchMain)
-        displayListDropU(arraySearchMain)
-        displayListDropA(arraySearchMain)
+        displayMatched(arraySearchMain)
     }else{
         const arraySearchMain = mixArray(mainBar.value)
-        displayError(arraySearchMain)
-        removeCardsBlock()
-        createCardsBlock(arraySearchMain)
-        displayCards(arraySearchMain)
-        displayListDropI(arraySearchMain)
-        displayListDropU(arraySearchMain)
-        displayListDropA(arraySearchMain)
+        displayMatched(arraySearchMain)
     }
 }
 function displayOnClickTag(){
@@ -540,13 +547,7 @@ document.addEventListener("click", function(e){
             e.target.parentElement.remove()
             const arraySearchMain = testAlreadyTag()
             console.log(arraySearchMain)
-            displayError(arraySearchMain)
-            removeCardsBlock()
-            createCardsBlock(arraySearchMain)
-            displayCards(arraySearchMain)
-            displayListDropI(arraySearchMain)
-            displayListDropU(arraySearchMain)
-            displayListDropA(arraySearchMain)
+            displayMatched(arraySearchMain)
             removeDisabledI(e)
             removeDisabledU(e)
             removeDisabledA(e)
@@ -554,13 +555,7 @@ document.addEventListener("click", function(e){
         }else{
             e.target.parentElement.remove()
             const arraySearchMain = mixArray(mainBar.value)
-            displayError(arraySearchMain)
-            removeCardsBlock()
-            createCardsBlock(arraySearchMain)
-            displayCards(arraySearchMain)
-            displayListDropI(arraySearchMain)
-            displayListDropU(arraySearchMain)
-            displayListDropA(arraySearchMain)
+            displayMatched(arraySearchMain)
             removeDisabledI(e)
             removeDisabledU(e)
             removeDisabledA(e)
@@ -601,10 +596,10 @@ function tagIMatched(arrayRecipes, input){
     const arraySearchIngredients = arrayRecipes.filter(arrayRecipe => {
         let validRecipe = false
         arrayRecipe.ingredients.forEach(item => {
-                if(standardize(item.ingredient).includes(standardizedInput)){ 
-                    return validRecipe = true
-                }
-            })
+            if(standardize(item.ingredient).includes(standardizedInput)){ 
+                return validRecipe = true
+            }
+        })
         return validRecipe
         })
     return [...arraySearchIngredients]
