@@ -36,11 +36,11 @@ function tagUMatched(arrayRecipes, input){
 }
 
 /** 1 Tag & Main search bar **/
-import {searchMatched} from "./mainSearch_bar.js";
+import {searchMatch} from "./mainSearch_bar.js";
 
 export function mixArray(input){
     const arrayTag = testAlreadyTag()
-    return [...searchMatched(arrayTag, input)]
+    return [...searchMatch(arrayTag, input)]
 }
 
 /** Several same type of tags **/

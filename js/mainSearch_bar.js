@@ -29,24 +29,6 @@ export function searchMatch(arrayRecipes, input){
     return arraySearchMain
 }
 
-/* Prog fonctionnelle */
-export function searchMatched(arrayRecipes, input){
-    const standardizedInput = standardize(input)
-    const arraySearchName = arrayRecipes.filter(arrayRecipe => standardize(arrayRecipe.name).includes(standardizedInput))
-    const arraySearchDescription = arrayRecipes.filter(arrayRecipe => standardize(arrayRecipe.description).includes(standardizedInput))
-    const arraySearchIngredients = arrayRecipes.filter(arrayRecipe => {
-        let validRecipe = false
-        arrayRecipe.ingredients.forEach(item => {
-                if(standardize(item.ingredient).includes(standardizedInput)){ 
-                    return validRecipe = true
-                }
-            })
-       return validRecipe
-    })
-    const arraySearch = [...arraySearchName, ...arraySearchDescription, ...arraySearchIngredients]
-    return [...new Set(arraySearch)]
-}
-
 /** Error in search bar **/
 function displayError(arraySearchMain){
     const errorDiv = document.querySelector("#navbar")
