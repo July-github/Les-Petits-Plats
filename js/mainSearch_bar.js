@@ -5,30 +5,6 @@ export function standardize(item){
     return item.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
 }
 
-/* Boucles natives */
-export function searchMatch(arrayRecipes, input){
-    let arraySearchMain = []
-    const standardizedInput = standardize(input)
-    for(let i=0; i<arrayRecipes.length; i++){
-        let lowerName = standardize(arrayRecipes[i].name)
-        let lowerDescription = standardize(arrayRecipes[i].description)
-
-        if(lowerName.includes(standardizedInput)){
-            arraySearchMain.push(arrayRecipes[i])
-        }
-        if(lowerDescription.includes(standardizedInput)){
-            arraySearchMain.push(arrayRecipes[i])
-        }
-        for(let j=0; j<arrayRecipes[i].ingredients.length; j++){
-            let lowerIngredient = standardize(arrayRecipes[i].ingredients[j].ingredient)
-            if(lowerIngredient.includes(standardizedInput)){
-                arraySearchMain.push(arrayRecipes[i])
-            }
-        }
-    }
-    return arraySearchMain
-}
-
 /* Prog fonctionnelle */
 export function searchMatched(arrayRecipes, input){
     const standardizedInput = standardize(input)
