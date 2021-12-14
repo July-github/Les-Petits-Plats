@@ -2,7 +2,7 @@ import {recipes} from "./recipes.js";
 
 /***** Cards *****/
 /* Create cards */
-import {createCardsBlock} from "./cards_creation.js";
+import {createCardsBlock, removeCardsBlock} from "./cards_creation.js";
 
 /* Fill cards */
 import {displayCards} from "./cards_creation.js";
@@ -11,29 +11,43 @@ createCardsBlock(recipes)
 displayCards(recipes)
 
 /***** Dropdowns *****/
-import {createLi, getListsI, getListsU, getListsA} from "./dropdowns.js";
+/*Get lists for buttons*/
+import {getListsI, getListsU, getListsA} from "./dropdowns.js";
+
+/*Fill dropdowns buttons with lists*/
+import {createLi} from "./dropdowns.js";
 
 createLi(getListsI(recipes), "ingredients")
-createLi(getListsU(recipes), "apparels")
-createLi(getListsA(recipes), "ustensils")
+createLi(getListsA(recipes), "apparels")
+createLi(getListsU(recipes), "ustensils")
 
 /* Search bar Dropdowns */
-import {getSearchDropI,  getSearchDropU, getSearchDropA} from "./dropdowns.js";
+import {listenDrop} from "./dropdowns.js";
 
-getSearchDropI()
-getSearchDropU()
-getSearchDropA()
+listenDrop()
 
 /* Display & close list on click*/
 import {displayList, closeList} from "./dropdowns.js";
 
 displayList();
-closeList()
+closeList();
 
 /***** Main search bar *****/
 const mainBar = document.getElementById("search_bar")
 
-import {validateInputSearch, displayMatched} from "./mainSearch_bar.js";
+/* Prog fonctionnelle */
+import {displayError, validateInputSearch} from "./mainSearch_bar.js";
+
+/* Display matched cards & dropdowns */
+function displayMatched(arraySearchMain){
+    displayError(arraySearchMain)
+    removeCardsBlock()
+    createCardsBlock(arraySearchMain)
+    displayCards(arraySearchMain)
+    displayListDropI(arraySearchMain)
+    displayListDropU(arraySearchMain)
+    displayListDropA(arraySearchMain)
+}
 
 /* Listen to a change in the search bar */
 mainBar.addEventListener("input", function(){
@@ -41,20 +55,18 @@ mainBar.addEventListener("input", function(){
 });
 
 /***** Tag *****/  
-/** Tags creation **/
+import {displayListDropI, displayListDropU, displayListDropA} from "./tags.js";
 import {displayOnClickTag} from "./tags.js";
 
 displayOnClickTag()
 
 /** Close tag on click **/
 import {removeDisabledI, removeDisabledU, removeDisabledA} from "./tags.js";
-
 document.addEventListener("click", function(e){
     if(e.target && e.target.className.includes("iconU") || e.target.className.includes("iconA") || e.target.className.includes("iconI")){
         if(mainBar.value===""){
             e.target.parentElement.remove()
             const arraySearchMain = testAlreadyTag()
-            console.log(arraySearchMain)
             displayMatched(arraySearchMain)
             removeDisabledI(e)
             removeDisabledU(e)

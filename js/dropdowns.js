@@ -65,7 +65,7 @@ function fillList(ulList, arrayRecipe){
 /* Search bar Dropdowns */
 import {standardize} from "./mainSearch_bar.js";
 
-function searchDropMatched(arrayDrops, e){
+export function searchDropMatched(arrayDrops, e){
     const standardizedInput = standardize(e.target.value)
         const newListDrop = arrayDrops.filter(function(arrayDrop){
             if((standardize(arrayDrop.innerText)).includes(standardizedInput)){
@@ -81,33 +81,60 @@ function searchDropMatched(arrayDrops, e){
             }
         })
         return newListDrop
-}      
+}   
+import {displayListDropI, displayListDropU, displayListDropA} from "./tags.js";   
+import {mixSearch} from "./mix_filters.js";
 
-export function getSearchDropI(){
-    const mainBar = document.getElementById("search_bar")
-    const searchDrop = document.getElementById("search_dropI")
+function getSearchDropI(){
+    const searchDrop = document.getElementById("search_dropI")  
+    const liTagIngredients = [...document.querySelectorAll("#myDropdown_I > ul > li")]  
     searchDrop.addEventListener("input", function(e) {
-        const liTagIngredients = [...document.querySelectorAll("#myDropdown_I > ul > li")]
+        const mainBar = document.getElementById("search_bar")
         if(mainBar.value ===""){
             searchDropMatched(liTagIngredients, e)
         }else{
-            searchDropMatched(liTagIngredients, e)
+            mixSearch(displayListDropI, mainBar, e)
         }
     })
 }
-export function getSearchDropU(){
+function getSearchDropU(){
     const searchDrop = document.getElementById("search_dropU")
+    const liTagUstensils = [...document.querySelectorAll("#myDropdown_U > ul > li")]
     searchDrop.addEventListener("input", function(e) {
-        const liTagUstensils = [...document.querySelectorAll("#myDropdown_U > ul > li")]
-        searchDropMatched(liTagUstensils, e)
+        const mainBar = document.getElementById("search_bar")
+        if(mainBar.value ===""){
+            searchDropMatched(liTagUstensils, e)
+        }else{
+            mixSearch(displayListDropU, mainBar, e)
+        }
     })
 }
-export function getSearchDropA(){
+function getSearchDropA(){
     const searchDrop = document.getElementById("search_dropA")
+    const liTagApparels = [...document.querySelectorAll("#myDropdown_A > ul > li")]
     searchDrop.addEventListener("input", function(e) {
-        const liTagApparels = [...document.querySelectorAll("#myDropdown_A > ul > li")]
-        searchDropMatched(liTagApparels, e)
+        const mainBar = document.getElementById("search_bar")
+        if(mainBar.value ===""){
+            searchDropMatched(liTagApparels, e)
+        }else{
+            mixSearch(displayListDropA, mainBar, e)
+        }
     })
+}
+export function listenDrop(){
+    const searchDropI = document.getElementById("search_dropI")
+    const searchDropU = document.getElementById("search_dropU")
+    const searchDropA = document.getElementById("search_dropA")
+
+    searchDropI.addEventListener("input", function(){
+        getSearchDropI(this);
+    });
+    searchDropU.addEventListener("input", function(){
+        getSearchDropU(this);
+    });
+    searchDropA.addEventListener("input", function(){
+        getSearchDropA(this);
+    });    
 }
 
 /* Display & close list on click*/
