@@ -29,12 +29,12 @@ export function createTag(e, tagType){
 /** Tags display **/
 import {standardize} from "./mainSearch_bar.js";
 
-function testEqualityI(arraySearchMain, liTagIngredient){
+export function testEqualityI(arraySearchMain, liTagIngredient){
     let validRecipe = false
     arraySearchMain.map(item => {
         item.ingredients.forEach(el => {
             if((standardize(el.ingredient)) === (standardize(liTagIngredient.textContent))){
-            return validRecipe = true
+                return validRecipe = true
             }
         })
     })
@@ -45,7 +45,7 @@ function testEqualityU(arraySearchMain, liTagUstensil){
     arraySearchMain.map(item => {
         item.ustensils.forEach(el => {
             if((standardize(el)) === (standardize(liTagUstensil.textContent))){
-            return validRecipe = true
+                return validRecipe = true
             }
         })
     })
@@ -54,44 +54,53 @@ function testEqualityU(arraySearchMain, liTagUstensil){
 function testEqualityA(arraySearchMain, liTagApparel){
     let validRecipe = false
     arraySearchMain.forEach(item => {
-            if((standardize(item.appliance)) === (standardize(liTagApparel.textContent))){
+        if((standardize(item.appliance)) === (standardize(liTagApparel.textContent))){
             return validRecipe = true
-            }
-        })
-        return validRecipe
+        }
+    })
+    return validRecipe
 }
 export function displayListDropI(arraySearchMain){
     const liTagIngredients = [...document.querySelectorAll("#myDropdown_I > ul > li")]
-    liTagIngredients.filter(liTagIngredient => testEqualityI(arraySearchMain, liTagIngredient))
     liTagIngredients.map(liTagIngredient =>{
         if(testEqualityI(arraySearchMain, liTagIngredient) === false){
             liTagIngredient.classList.add("d-none")
-    }else{
-        liTagIngredient.classList.remove("d-none")
-    }
-})
+            return liTagIngredient
+        }else{
+            liTagIngredient.classList.remove("d-none")
+            return liTagIngredient
+        }
+    })
+    const newListDrop = liTagIngredients.filter(liTagIngredient => liTagIngredient.classList.contains("d-none") === false)
+    return newListDrop
 }
 export function displayListDropU(arraySearchMain){
     const liTagUstensils = [...document.querySelectorAll("#myDropdown_U > ul > li")]
-    liTagUstensils.filter(liTagUstensil => testEqualityU(arraySearchMain, liTagUstensil))
     liTagUstensils.map(liTagUstensil =>{
         if(testEqualityU(arraySearchMain, liTagUstensil) === false){
             liTagUstensil.classList.add("d-none")
-    }else{
-        liTagUstensil.classList.remove("d-none")
-    }
-})
+            return liTagUstensil
+        }else{
+            liTagUstensil.classList.remove("d-none")
+            return liTagUstensil
+        }
+    })
+    const newListDrop = liTagUstensils.filter(liTagUstensil => liTagUstensil.classList.contains("d-none") === false)
+    return newListDrop
 }
 export function displayListDropA(arraySearchMain){
     const liTagApparels = [...document.querySelectorAll("#myDropdown_A > ul > li")]
-    liTagApparels.filter(liTagApparel => testEqualityA(arraySearchMain, liTagApparel))
     liTagApparels.map(liTagApparel =>{
         if(testEqualityA(arraySearchMain, liTagApparel) === false){
             liTagApparel.classList.add("d-none")
-    }else{
-        liTagApparel.classList.remove("d-none")
-    }
-})
+            return liTagApparel
+        }else{
+            liTagApparel.classList.remove("d-none")
+            return liTagApparel
+        }
+    })
+    const newListDrop = liTagApparels.filter(liTagApparel => liTagApparel.classList.contains("d-none") === false)
+    return newListDrop
 }
 
 import {displayMatched} from "./mainSearch_bar.js";
@@ -140,7 +149,6 @@ export function removeDisabledI(e){
     const liTagIngredients = [...document.querySelectorAll("#myDropdown_I > ul > li")]
     liTagIngredients.map(liTagIngredient =>{
         if(e.target.parentElement.innerText === liTagIngredient.innerText){
-            console.log(liTagIngredient.innerText)
             liTagIngredient.classList.remove("disabled")
         }
     })
@@ -149,7 +157,6 @@ export function removeDisabledU(e){
     const liTagUstensils = [...document.querySelectorAll("#myDropdown_U > ul > li")]
     liTagUstensils.map(liTagUstensil =>{
         if(e.target.parentElement.innerText === liTagUstensil.innerText){
-            console.log(liTagUstensil.innerText)
             liTagUstensil.classList.remove("disabled")
         }
     })
@@ -158,7 +165,6 @@ export function removeDisabledA(e){
     const liTagApparels = [...document.querySelectorAll("#myDropdown_A > ul > li")]
     liTagApparels.map(liTagApparel =>{
         if(e.target.parentElement.innerText === liTagApparel.innerText){
-            console.log(liTagApparel.innerText)
             liTagApparel.classList.remove("disabled")
         }
     })

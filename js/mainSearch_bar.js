@@ -30,7 +30,7 @@ export function searchMatch(arrayRecipes, input){
 }
 
 /** Error in search bar **/
-function displayError(arraySearchMain){
+export function displayError(arraySearchMain){
     const errorDiv = document.querySelector("#navbar")
     if(arraySearchMain.length === 0){
         errorDiv.setAttribute("data-after", "Aucune recette ne correspond à votre critère… vous pouvez chercher « tarte aux pommes », « poisson », etc.")
@@ -53,6 +53,7 @@ export function displayMatched(arraySearchMain){
 }
 
 import {mixArray} from "./mix_filters.js";
+import{recipes} from "./recipes.js";
 
 export function validateInputSearch(){
     const mainBar = document.getElementById("search_bar")
@@ -63,5 +64,7 @@ export function validateInputSearch(){
     if(validInputSearch === true){
         const arraySearchMain = mixArray(mainBar.value)
         displayMatched(arraySearchMain)    
+    }else{
+        displayMatched(recipes)
     }
 }

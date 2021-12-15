@@ -2,7 +2,7 @@ import {recipes} from "./recipes.js";
 
 /***** Cards *****/
 /* Create cards */
-import {createCardsBlock} from "./cards_creation.js";
+import {createCardsBlock, removeCardsBlock} from "./cards_creation.js";
 
 /* Fill cards */
 import {displayCards} from "./cards_creation.js";
@@ -11,18 +11,20 @@ createCardsBlock(recipes)
 displayCards(recipes)
 
 /***** Dropdowns *****/
-import {createLi, getListsI, getListsU, getListsA} from "./dropdowns.js";
+/*Get lists for buttons*/
+import {getListsI, getListsU, getListsA} from "./dropdowns.js";
+
+/*Fill dropdowns buttons with lists*/
+import {createLi} from "./dropdowns.js";
 
 createLi(getListsI(recipes), "ingredients")
-createLi(getListsU(recipes), "apparels")
-createLi(getListsA(recipes), "ustensils")
+createLi(getListsA(recipes), "apparels")
+createLi(getListsU(recipes), "ustensils")
 
 /* Search bar Dropdowns */
-import {getSearchDropI,  getSearchDropU, getSearchDropA} from "./dropdowns.js";
+import {listenDrop} from "./dropdowns.js";
 
-getSearchDropI()
-getSearchDropU()
-getSearchDropA()
+listenDrop()
 
 /* Display & close list on click*/
 import {displayList, closeList} from "./dropdowns.js";
@@ -33,7 +35,7 @@ closeList()
 /***** Main search bar *****/
 const mainBar = document.getElementById("search_bar")
 
-import {validateInputSearch, displayMatched} from "./mainSearch_bar.js";
+import {validateInputSearch} from "./mainSearch_bar.js";
 
 /* Listen to a change in the search bar */
 mainBar.addEventListener("input", function(){
@@ -41,13 +43,13 @@ mainBar.addEventListener("input", function(){
 });
 
 /***** Tag *****/  
-/** Tags creation **/
 import {displayOnClickTag} from "./tags.js";
 
 displayOnClickTag()
 
 /** Close tag on click **/
 import {removeDisabledI, removeDisabledU, removeDisabledA} from "./tags.js";
+import {displayMatched} from "./mainSearch_bar.js";
 
 document.addEventListener("click", function(e){
     if(e.target && e.target.className.includes("iconU") || e.target.className.includes("iconA") || e.target.className.includes("iconI")){

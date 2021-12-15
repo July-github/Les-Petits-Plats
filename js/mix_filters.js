@@ -35,6 +35,15 @@ function tagUMatched(arrayRecipes, input){
     return [...arrayTagUstensils]
 }
 
+/** Main search bar & Drop search bar **/
+import {searchDropMatched} from "./dropdowns.js";
+
+export function mixSearch(displayListDrop, input, e){
+    const arraySearchMain = mixArray(input.value)
+    const newLis = displayListDrop(arraySearchMain)
+    searchDropMatched(newLis, e)
+}
+
 /** 1 Tag & Main search bar **/
 import {searchMatch} from "./mainSearch_bar.js";
 
@@ -102,7 +111,11 @@ export function testAlreadyTag(){
 
     }if((testTagI === 0) && (testTagA !== 0) && (testTagU !== 0)){
         return reduceMixArray(textParentTagA, tagAMatched, tagUMatched, textParentTagU)
-
+    
+    }if((testTagI !== 0) && (testTagA !== 0) && (testTagU !== 0)){
+        const arrayRecipe = reduceMixArray(textParentTagI, tagIMatched, tagAMatched, textParentTagA)
+        return tagUMatched(arrayRecipe, textParentTagU.slice(-1)[0])
+    
     }if((testTagI === 0) && (testTagA === 0) && (testTagU === 0)){
         return recipes
     }
