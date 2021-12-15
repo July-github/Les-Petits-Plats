@@ -26,7 +26,7 @@ export function searchMatch(arrayRecipes, input){
             }
         }
     }
-    return arraySearchMain
+    return [...new Set(arraySearchMain)]
 }
 
 /** Error in search bar **/
