@@ -114,8 +114,11 @@ export function testAlreadyTag(){
     
     }if((testTagI !== 0) && (testTagA !== 0) && (testTagU !== 0)){
         const arrayRecipe = reduceMixArray(textParentTagI, tagIMatched, tagAMatched, textParentTagA)
-        return tagUMatched(arrayRecipe, textParentTagU.slice(-1)[0])
-    
+        for (let i=0; i<textParentTagU.length; i++){
+            const arrayTagU = tagUMatched(arrayRecipe, textParentTagU[i])
+            return tagUMatched(arrayTagU, textParentTagU.slice(-1)[0])
+        }
+        
     }if((testTagI === 0) && (testTagA === 0) && (testTagU === 0)){
         return recipes
     }
