@@ -32,6 +32,7 @@ export function displayError(arraySearchMain){
         errorDiv.setAttribute("data-after", "");
     }
 }
+
 /* Display matched cards & dropdowns */
 import {displayListDropI, displayListDropU, displayListDropA} from "./tags.js";
 import {createCardsBlock, displayCards, removeCardsBlock} from "./cards_creation.js";

@@ -2,7 +2,7 @@ import {recipes} from "./recipes.js";
 
 /***** Cards *****/
 /* Create cards */
-import {createCardsBlock, removeCardsBlock} from "./cards_creation.js";
+import {createCardsBlock} from "./cards_creation.js";
 
 /* Fill cards */
 import {displayCards} from "./cards_creation.js";
@@ -34,20 +34,7 @@ closeList();
 
 /***** Main search bar *****/
 const mainBar = document.getElementById("search_bar")
-
-/* Prog fonctionnelle */
-import {displayError, validateInputSearch} from "./mainSearch_bar.js";
-
-/* Display matched cards & dropdowns */
-function displayMatched(arraySearchMain){
-    displayError(arraySearchMain)
-    removeCardsBlock()
-    createCardsBlock(arraySearchMain)
-    displayCards(arraySearchMain)
-    displayListDropI(arraySearchMain)
-    displayListDropU(arraySearchMain)
-    displayListDropA(arraySearchMain)
-}
+import {displayMatched, validateInputSearch} from "./mainSearch_bar.js";
 
 /* Listen to a change in the search bar */
 mainBar.addEventListener("input", function(){
@@ -55,7 +42,6 @@ mainBar.addEventListener("input", function(){
 });
 
 /***** Tag *****/  
-import {displayListDropI, displayListDropU, displayListDropA} from "./tags.js";
 import {displayOnClickTag} from "./tags.js";
 
 displayOnClickTag()

@@ -67,21 +67,22 @@ import {standardize} from "./mainSearch_bar.js";
 
 export function searchDropMatched(arrayDrops, e){
     const standardizedInput = standardize(e.target.value)
-        const newListDrop = arrayDrops.filter(function(arrayDrop){
-            if((standardize(arrayDrop.innerText)).includes(standardizedInput)){
-                arrayDrop.classList.remove("d-none")
+    const newListDrop = arrayDrops.filter(function(arrayDrop){
+        if((standardize(arrayDrop.innerText)).includes(standardizedInput)){
+            arrayDrop.classList.remove("d-none")
+            return arrayDrop    
+        }else{
+            if(arrayDrop.classList.contains("d-none")){
                 return arrayDrop    
             }else{
-                if(arrayDrop.classList.contains("d-none")){
-                    return arrayDrop    
-                }else{
-                    arrayDrop.classList.add("d-none")
-                    return arrayDrop    
-                }
+                arrayDrop.classList.add("d-none")
+                return arrayDrop    
             }
-        })
-        return newListDrop
+        }
+    })
+    return newListDrop
 }   
+
 import {displayListDropI, displayListDropU, displayListDropA} from "./tags.js";   
 import {mixSearch} from "./mix_filters.js";
 

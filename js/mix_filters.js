@@ -13,7 +13,7 @@ function tagIMatched(arrayRecipes, input){
             }
         })
         return validRecipe
-        })
+    })
     return [...arraySearchIngredients]
 }
 function tagAMatched(arrayRecipes, input){
@@ -92,18 +92,21 @@ export function testAlreadyTag(){
         }else{
             return reduceArray(textParentTagI, tagIMatched)
         } 
+        
     }if((testTagA !== 0) && (testTagI === 0) && (testTagU === 0)){
         if(testTagA === 1){
             return tagAMatched(recipes, textParentTagA.slice(-1)[0])
         }else{
             return reduceArray(textParentTagA, tagAMatched)
         } 
+
     }if((testTagU !== 0) && (testTagA === 0) && (testTagI === 0)){
         if(testTagU === 1){
             return tagUMatched(recipes, textParentTagU.slice(-1)[0])
         }else{
             return reduceArray(textParentTagU, tagUMatched)
         }
+
     }if((testTagI !== 0) && (testTagA !== 0) && (testTagU === 0)){
         return reduceMixArray(textParentTagI, tagIMatched, tagAMatched, textParentTagA)
 
@@ -116,6 +119,7 @@ export function testAlreadyTag(){
     }if((testTagI !== 0) && (testTagA !== 0) && (testTagU !== 0)){
         const arrayRecipe = reduceMixArray(textParentTagI, tagIMatched, tagAMatched, textParentTagA)
         return tagUMatched(arrayRecipe, textParentTagU.slice(-1)[0])
+
     }if((testTagI === 0) && (testTagA === 0) && (testTagU === 0)){
         return recipes
     }
