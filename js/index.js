@@ -46,7 +46,7 @@ import {displayOnClickTag} from "./tags.js";
 
 displayOnClickTag()
 
-/** Close tag on click **/
+/* Close tag on click */
 import {removeDisabledI, removeDisabledU, removeDisabledA} from "./tags.js";
 document.addEventListener("click", function(e){
     if(e.target && e.target.className.includes("iconU") || e.target.className.includes("iconA") || e.target.className.includes("iconI")){

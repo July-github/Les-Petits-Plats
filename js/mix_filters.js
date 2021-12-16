@@ -2,7 +2,7 @@ import {recipes} from "./recipes.js";
 import {standardize} from "./mainSearch_bar.js";
 
 /***** Mix filters *****/
-/** Filter list dropdowns depending on tags **/
+/* Filter list dropdowns depending on tags */
 function tagIMatched(arrayRecipes, input){
     const standardizedInput = standardize(input)
     const arraySearchIngredients = arrayRecipes.filter(arrayRecipe => {
@@ -35,8 +35,7 @@ function tagUMatched(arrayRecipes, input){
     return [...arrayTagUstensils]
 }
 
-
-/** Main search bar & Drop search bar **/
+/* Main search bar & Drop search bar */
 import {searchDropMatched} from "./dropdowns.js";
 
 export function mixSearch(displayListDrop, input, e){
@@ -45,7 +44,7 @@ export function mixSearch(displayListDrop, input, e){
     searchDropMatched(newLis, e)
 }
 
-/** 1 Tag & Main search bar **/
+/* 1 Tag & Main search bar */
 import {searchMatched} from "./mainSearch_bar.js";
 
 export function mixArray(input){
@@ -53,7 +52,7 @@ export function mixArray(input){
     return [...searchMatched(arrayTag, input)]
 }
 
-/** Several same type of tags **/
+/* Several same type of tags */
 function reduceArray(textParentTag, tagMatched){
     for (let i=0; i<textParentTag.length; i++){
         const arrayTag = tagMatched(recipes, textParentTag[i])
@@ -61,7 +60,7 @@ function reduceArray(textParentTag, tagMatched){
     }
 }
 
-/** Several different types of tags **/
+/* Several different types of tags */
 function reduceMixArray(textParentTagX, tagMatchedX, tagMatchedY, textParentTagY){
     const reducedX = reduceArray(textParentTagX, tagMatchedX)
     for (let i=0; i<textParentTagY.length; i++){
@@ -70,7 +69,7 @@ function reduceMixArray(textParentTagX, tagMatchedX, tagMatchedY, textParentTagY
     }
 }
 
-/** Test for existing Tags **/
+/* Test for existing Tags */
 export function testAlreadyTag(){
     const testTagI = document.getElementsByClassName("iconI").length
     const testTagA = document.getElementsByClassName("iconA").length
@@ -122,6 +121,7 @@ export function testAlreadyTag(){
             const arrayTagU = tagUMatched(arrayRecipe, textParentTagU[i])
             return tagUMatched(arrayTagU, textParentTagU.slice(-1)[0])
         }
+        
     }if((testTagI === 0) && (testTagA === 0) && (testTagU === 0)){
         return recipes
     }

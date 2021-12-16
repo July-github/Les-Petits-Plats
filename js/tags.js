@@ -1,5 +1,5 @@
 /***** Tag *****/  
-/** Tags creation **/
+/* Tags creation */
 function getTagColor(tagType){
     switch(tagType){
         case "ingredients":
@@ -26,10 +26,11 @@ export function createTag(e, tagType){
         createTag.innerHTML = e.target.innerHTML + '<i class="far fa-times-circle iconA"></i>'
     }
 }
-/** Tags display **/
+
+/* Tags display */
 import {standardize} from "./mainSearch_bar.js";
 
-export function testEqualityI(arraySearchMain, liTagIngredient){
+function testEqualityI(arraySearchMain, liTagIngredient){
     let validRecipe = false
     arraySearchMain.map(item => {
         item.ingredients.forEach(el => {
@@ -60,6 +61,7 @@ function testEqualityA(arraySearchMain, liTagApparel){
         })
     return validRecipe
 }
+
 export function displayListDropI(arraySearchMain){
     const liTagIngredients = [...document.querySelectorAll("#myDropdown_I > ul > li")]
     liTagIngredients.map(liTagIngredient =>{
@@ -144,7 +146,7 @@ export function displayOnClickTag(){
     )
 }
 
-/** Close tag on click **/
+/* Close tag on click */
 export function removeDisabledI(e){
     const liTagIngredients = [...document.querySelectorAll("#myDropdown_I > ul > li")]
     liTagIngredients.map(liTagIngredient =>{

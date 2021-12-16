@@ -23,7 +23,7 @@ export function searchMatched(arrayRecipes, input){
     return [...new Set(arraySearch)]
 }
 
-/** Error in search bar **/
+/* Error in search bar */
 export function displayError(arraySearchMain){
     const errorDiv = document.querySelector("#navbar")
     if(arraySearchMain.length === 0){

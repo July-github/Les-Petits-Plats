@@ -1,5 +1,5 @@
 /***** Dropdowns *****/
-/*Get lists for buttons*/
+/* Get lists for buttons */
 export function getListsU(array){
     const arrayU = []
     for(let i=0; i<array.length; i++){
@@ -32,12 +32,12 @@ export function getListsI(array){
     return arrayI.sort((a,b) => a.localeCompare(b))
 }
 
-/*Delete duplicates*/
+/* Delete duplicates */
 function getUnique(arrayDrop){
     return [...new Set(arrayDrop)]
 }
 
-/*Fill dropdowns buttons with lists*/
+/* Fill dropdowns buttons with lists */
 function getUl(ulType){
     switch(ulType){
         case "ingredients":
@@ -138,7 +138,7 @@ export function listenDrop(){
     });    
 }
 
-/* Display & close list on click*/
+/* Display & close list on click */
 export function displayList(){
     const showLists = [...document.querySelectorAll(".dropbtn")]
     showLists.map(showList => showList.addEventListener("click", function(){
